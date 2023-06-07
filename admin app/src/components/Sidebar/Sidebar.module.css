@@ -1,0 +1,36 @@
+.wrapper {
+    width: 20%;
+    min-height: 100vh;
+    border-right: 1px solid #96A7C6;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    height: 10vh;
+    border-bottom: 1px solid #96A7C6;
+    color: #7553F8;
+}
+
+.menu-item {
+    display: flex;
+    padding: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #96A7C6;
+}
+
+.menu-item:hover {
+    background-color: #ccc;
+    color: #3668c5;
+}
+
+.menu-item i {
+    margin-right: 8px;
+    color:#7553F8;
+}
+
+.sidebar-wrapper {
+    padding-left: 26px;
+    color: #96A7C6;
+}

@@ -1,0 +1,29 @@
+POST http://localhost:5000/create-room
+Content-Type: application/json
+
+{
+    "title": "2 bed room",
+    "price": 100,
+    "people": 2,
+    "desc": "allow smoking",
+    "roomNumbers": 5
+}
+
+
+#######
+
+POST http://localhost:5000/create-hotel
+Content-Type: application/json
+
+{
+    "name": "Sen Boutique",
+    "type": "Appartment",
+    "city": "Ho Chi Minh",
+    "address": "5 Nguyen Cu, Thao Dien Ward, District 2",
+    "distance": "1.5km from center",
+    "photos": "aaaaa",
+    "desc": "cozy and chill",
+    "price": 900000,
+    "rating": 5,
+    "featured": "Yes"
+}

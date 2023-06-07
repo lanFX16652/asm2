@@ -1,0 +1,22 @@
+.budgetroom-wrapper {
+  border: 1px solid black;
+}
+.budgetroom-info-wrapper {
+  border: 1px solid black;
+  display: flex;
+  column-gap: 30px;
+}
+.left-content {
+  text-align: left;
+}
+.right-content {
+  display: flex;
+}
+.room-check-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 0px 6px;
+}
+.room-input {
+  width: 20px;
+}

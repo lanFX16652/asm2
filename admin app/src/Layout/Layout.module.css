@@ -1,0 +1,12 @@
+.wrapper {
+    display: flex;
+}
+
+.content-wrapper {
+    width: 80%;
+}
+
+.content-header {
+    height: 10vh;
+    border-bottom: 1px solid #96A7C6;
+}

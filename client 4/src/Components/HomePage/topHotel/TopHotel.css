@@ -1,0 +1,28 @@
+.hotel-container {
+  display: flex;
+  justify-content: center;
+}
+.hotel-title {
+  margin: 40px 0px 20px 20px;
+}
+
+.hotel-wrap img {
+  width: 220px;
+  height: 220px;
+}
+.hotel-wrap {
+  margin: 0px 10px;
+}
+.hotel-content {
+  margin: 5px 0px;
+}
+.hotel-rate {
+  margin-top: 15px;
+}
+.rate {
+  background-color: rgb(31, 31, 117);
+  padding: 3px;
+  color: white;
+  font-weight: bold;
+  margin-right: 10px;
+}

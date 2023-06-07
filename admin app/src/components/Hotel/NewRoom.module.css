@@ -1,0 +1,36 @@
+.content-header {
+    height: 10vh;
+    border-bottom: 1px solid #96A7C6;
+}
+
+.input-wrapper {
+    padding: 10px 30px 10px 30px;
+}
+.newproduct-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    box-shadow: 2px 2px 4px 4px #88888839;
+}
+
+.input-container {
+    /* padding: 10px 30px 10px 30px; */
+    /* margin: 20px; */
+    box-shadow: 2px 2px 4px 4px #88888839;
+}
+.row {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 20px 30px 20px;
+}
+
+.col-md-5 {
+    width: 35%;  
+}
+
+.col-md-5 input {
+    width: 100%;
+    padding: 6px;
+    border: none;
+    border-bottom: 1px solid black;
+}

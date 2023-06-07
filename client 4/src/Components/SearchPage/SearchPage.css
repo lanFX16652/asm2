@@ -1,0 +1,143 @@
+.searchPage {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Search Popup */
+.popup-container {
+  width: 20%;
+  margin: 20px 5px 0px 20px;
+  padding: 10px;
+  background-color: rgb(253, 208, 4);
+  border-radius: 20px;
+}
+.search-title {
+  margin: 10px 0px 20px 0px;
+  color: rgb(101, 101, 101);
+}
+.destination-wrap {
+  margin-bottom: 10px;
+}
+.date-wrap {
+  margin-bottom: 10px;
+}
+.popup-input {
+  width: 93%;
+  padding: 10px;
+  border: none;
+}
+.option-input-wrap {
+  margin: 20px 10px 40px 10px;
+}
+.option-wrap {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0px;
+  color: rgb(101, 101, 101);
+}
+.option-input {
+  width: 20%;
+  margin: 5px 0px;
+}
+.popup-searchBtn {
+  width: 100%;
+  padding: 10px;
+  background-color: rgb(68, 159, 238);
+  color: white;
+  border: none;
+}
+
+/* Search Items */
+.search-container {
+  width: 75%;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 20px 0px 5px;
+  padding: 5px;
+}
+.searchHotel-item {
+  width: 100%;
+  height: 240px;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
+  border-radius: 3px;
+}
+.search-image-container {
+  width: 20%;
+}
+.search-image-container img {
+  width: 100%;
+  height: auto;
+  margin: 5px;
+}
+.hotel-content {
+  width: 40%;
+  font-size: 12px;
+}
+.hotel-name {
+  color: rgb(68, 159, 238);
+  margin-bottom: 10px;
+}
+.hotel-tag {
+  background-color: rgb(3, 95, 3);
+  color: white;
+  border-radius: 5px;
+  padding: 5px 0px;
+  margin: 7px 0px;
+  display: inline-block;
+}
+.hotel-description {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.cancel {
+  margin: 10px 0px;
+  color: rgb(3, 95, 3);
+  font-weight: bold;
+}
+.inviting {
+  color: rgb(3, 95, 3);
+}
+.rate-container {
+  width: 25%;
+  padding: 5px 5px 10px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: right;
+}
+.rate-wrap {
+  display: flex;
+  justify-content: space-between;
+}
+.rate-text {
+  font-weight: bold;
+}
+.rate-point {
+  font-weight: bold;
+  font-size: smaller;
+  background-color: rgb(31, 31, 117);
+  color: white;
+  padding: 5px;
+}
+.hotelPrice {
+  font-weight: 500;
+}
+.tax {
+  font-size: 12px;
+  color: rgb(101, 101, 101);
+  margin-top: 10px;
+}
+.availabilityBtn {
+  padding: 10px;
+  width: 150px;
+  background-color: rgb(68, 159, 238);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  margin-top: 3px;
+}

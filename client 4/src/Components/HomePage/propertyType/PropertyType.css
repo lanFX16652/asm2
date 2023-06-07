@@ -1,0 +1,14 @@
+.property-container {
+  display: flex;
+  justify-content: center;
+}
+.property-title {
+  margin: 20px 10px 10px 5px;
+}
+
+.property-wrap img {
+  width: 180px;
+  height: 150px;
+  border-radius: 12px 12px 0px 0px;
+  margin: 5px;
+}
