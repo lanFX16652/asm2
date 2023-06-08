@@ -2,85 +2,66 @@ import classes from "./RoomItem.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const RoomItem = ({
-  roomId,
-  roomsTypeId,
-  setRoomsTypeId,
-  roomsNumber,
-  setRoomsNumber,
-}) => {
+const RoomItem = ({ roomId, roomBookedData, setRoomBookedData }) => {
   const [roomData, setRoomData] = useState();
 
-  console.log(roomsNumber);
   const onChooseRoom = (e, room) => {
     if (e.target.checked) {
-      // ADD
-      setRoomsNumber([...roomsNumber, room.roomNumber]);
-
-      if (!roomsTypeId.includes(room._id)) {
-        setRoomsTypeId([...roomsTypeId, room._id]);
+      if (roomBookedData.length === 0) {
+        const newBookedData = [
+          {
+            roomTypeId: roomId,
+            roomsNumber: [room],
+          },
+        ];
+        return setRoomBookedData(newBookedData);
       }
-    } else {
-      // REMOVE
-      const newRoomNumber = roomsNumber.filter(
-        (roomNumber) => roomNumber !== room.roomNumber
+
+      let roomBookedUpdate = roomBookedData;
+
+      const indexRoomBookedExist = roomBookedUpdate.findIndex(
+        (roomBooked) => roomBooked.roomTypeId === roomId
       );
+      const roomBookedExist = roomBookedUpdate[indexRoomBookedExist];
 
-      setRoomsNumber(newRoomNumber);
-
-      if (newRoomNumber.length === 0) {
-        setRoomsTypeId(
-          roomsTypeId.filter((roomTypeId) => roomTypeId !== roomData._id)
-        );
+      if (roomBookedExist) {
+        roomBookedUpdate[indexRoomBookedExist] = {
+          ...roomBookedExist,
+          roomsNumber: [...roomBookedExist.roomsNumber, room],
+        };
+      } else {
+        roomBookedUpdate = [
+          ...roomBookedData,
+          {
+            roomTypeId: roomId,
+            roomsNumber: [room],
+          },
+        ];
       }
 
-      let needRemove = true;
+      setRoomBookedData(roomBookedUpdate);
+    } else {
+      const updateRoomBooked = roomBookedData
+        .map((roomBooked) => {
+          if (roomBooked.roomTypeId === roomId) {
+            return {
+              ...roomBooked,
+              roomsNumber: roomBooked.roomsNumber.filter(
+                (roomNumber) => roomNumber !== room
+              ),
+            };
+          }
+          return roomBooked;
+        })
+        .map((roomBooked) => {
+          if (roomBooked.roomsNumber.length === 0) {
+            return undefined;
+          }
+          return roomBooked;
+        })
+        .filter(Boolean);
 
-      needRemove = newRoomNumber.some((roomNumber) => {
-        let result = false;
-        console.log(roomNumber, room.roomNumbers);
-        room.roomNumbers.forEach((roomNumberChild) => {
-          result = roomNumber !== roomNumberChild;
-        });
-
-        return result;
-      });
-
-      if (needRemove) {
-        setRoomsTypeId(
-          roomsTypeId.filter((roomTypeId) => roomTypeId !== roomData._id)
-        );
-      }
-      // newRoomNumber.forEach((roomNumber) => {
-      //   if ()
-
-      //   if (!room.roomNumbers.includes(roomNumber)) {
-      //     needRemove = true;
-      //   }
-      // });
-
-      // if (needRemove) {
-      //   // console.log(roomData._id);
-      //   setRoomsTypeId(
-      //     roomsTypeId.filter((roomTypeId) => roomTypeId !== roomData._id)
-      //   );
-      // }
-
-      // let isHaveRoomNumber = (newRoomNumber.length = 0
-      //   ? false
-      //   : newRoomNumber.some((roomNumber) => {
-      //       let result = false;
-      //       roomData.roomNumbers.forEach((roomNumberChildren) => {
-      //         result = roomNumber === roomNumberChildren;
-      //       });
-
-      //       return result;
-      //     }));
-
-      // if (isHaveRoomNumber)
-      //   setRoomsTypeId(
-      //     roomsTypeId.filter((roomTypeId) => roomTypeId !== roomData._id)
-      //   );
+      setRoomBookedData(updateRoomBooked);
     }
   };
 
@@ -96,14 +77,8 @@ const RoomItem = ({
         .catch((error) => console.log(error));
     };
 
-    if (roomId) {
-      fetchListRoom();
-    }
+    fetchListRoom();
   }, [roomId]);
-
-  const flattenRoom = roomData?.roomNumbers?.reduce((prevData, roomNumber) => {
-    return [...prevData, { ...roomData, roomNumber }];
-  }, []);
 
   return (
     <div className={classes["budgetroom-wrapper"]}>
@@ -115,18 +90,15 @@ const RoomItem = ({
           <h4>{roomData?.price}$</h4>
         </div>
         <div className={classes["right-content"]}>
-          {flattenRoom?.map((currentRoom) => {
+          {roomData?.roomNumbers?.map((roomNumber) => {
             return (
-              <div
-                key={currentRoom._id}
-                className={classes["room-check-wrapper"]}
-              >
-                <p>{currentRoom.roomNumber}</p>
+              <div key={roomNumber} className={classes["room-check-wrapper"]}>
+                <p>{roomNumber}</p>
                 <input
                   className={classes["rooms-input"]}
                   type="checkbox"
                   onChange={(e) => {
-                    onChooseRoom(e, currentRoom);
+                    onChooseRoom(e, roomNumber);
                   }}
                 ></input>
               </div>

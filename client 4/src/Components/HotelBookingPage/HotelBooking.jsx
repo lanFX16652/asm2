@@ -15,10 +15,9 @@ const HotelBooking = () => {
   const params = useParams();
   const user = useSelector((state) => state.auth.login.currentUser);
 
-  const [roomsTypeId, setRoomsTypeId] = useState([]);
-  const [roomsNumber, setRoomsNumber] = useState([]);
+  const [roomBookedData, setRoomBookedData] = useState([]);
 
-  console.log(roomsTypeId, roomsNumber);
+  console.log(roomBookedData);
 
   const [calendar, setCalendar] = useState([
     {
@@ -102,40 +101,16 @@ const HotelBooking = () => {
       <div className={classes["container-selectrooms"]}>
         <h3>Select Rooms</h3>
         <div className={classes["doubleroom-twinroom-wrapper"]}>
-          {rooms?.map((roomId, index) => {
+          {rooms?.map((roomId) => {
             return (
               <RoomItem
                 key={roomId}
                 roomId={roomId}
-                roomsTypeId={roomsTypeId}
-                setRoomsTypeId={setRoomsTypeId}
-                roomsNumber={roomsNumber}
-                setRoomsNumber={setRoomsNumber}
+                roomBookedData={roomBookedData}
+                setRoomBookedData={setRoomBookedData}
               />
             );
           })}
-          {/* <div className={classes["budget-doubleroom-wrapper"]}>
-            <h4>Budget Double Room</h4>
-            <div className={classes["budgetdoubleroom-info-wrapper"]}>
-              <div className={classes["left-content"]}>
-                <h4>Pay nothing until September 04, 2022</h4>
-                <p>Max people: 2</p>
-                <h4>350$</h4>
-              </div>
-              <div className={classes["right-content"]}>
-                {listRoomData?.map((roomName) => {
-                  return (
-                    <RoomItem
-                      key={roomName}
-                      roomName={roomName}
-                      roomsBook={roomsBook}
-                      setRoomsBook={setRoomsBook}
-                    />
-                  );
-                })}
-              </div>
-            </div>
-          </div> */}
         </div>
       </div>
 
