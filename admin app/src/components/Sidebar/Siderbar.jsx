@@ -12,10 +12,12 @@ const Siderbar = () => {
       <div className={classes["sidebar-wrapper"]}>
         <div>
           <h4 className={classes["menu-title"]}>MAIN</h4>
-          <div className={classes["menu-item"]}>
-            <i className="bi bi-border-all"></i>
-            <span>Dashboard</span>
-          </div>
+          <Link to="/dashboard" className={classes["menu-item"]}>
+            <div>
+              <i className="bi bi-border-all"></i>
+              <span>Dashboard</span>
+            </div>
+          </Link>
         </div>
         <div>
           <h4 className={classes["menu-title"]}>LIST</h4>
@@ -35,10 +37,12 @@ const Siderbar = () => {
               <span>Rooms</span>
             </div>
           </Link>
-          <div className={classes["menu-item"]}>
-            <i class="bi bi-truck"></i>
-            <span>Transactions</span>
-          </div>
+          <Link to="/transaction/list" className={classes["menu-item"]}>
+            <div>
+              <i class="bi bi-truck"></i>
+              <span>Transactions</span>
+            </div>
+          </Link>
         </div>
         <div>
           <h4 className={classes["menu-title"]}>NEW</h4>
