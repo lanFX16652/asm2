@@ -1,86 +1,110 @@
 .dashboard-wrapper {
-    width: 100%;
-    padding: 10px 20px;
-    border: 1px solid black;
+  width: 100%;
+  padding: 10px 20px;
+  /* border: 1px solid black; */
 }
 
 .users-orders-earnings-balance-wrapper {
-    position: absolute;
-    width: 70%;
-    display: flex;
-    margin: 10px;
-    column-gap: 30px;
+  width: 100%;
+  display: flex;
+  margin: 10px;
+  column-gap: 30px;
 }
 
-.users-orders-earnings-balance-wrapper div {
-    width: 24%;
-    padding: 0px 10px;
-    border: none;
-    border-radius: 20px;
-    box-shadow: 2px 2px 4px 4px #88888839;
+.users {
+  width: 22%;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px 4px #88888839;
+}
+
+.orders {
+  width: 22%;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px 4px #88888839;
+}
+
+.earnings {
+  width: 22%;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px 4px #88888839;
+}
+
+.balance {
+  width: 22%;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px 4px #88888839;
 }
 
 .users-orders-earnings-balance-wrapper div h2 {
-    font-weight: 100;
+  font-weight: 100;
 }
 
-.users-orders-earnings-balance-wrapper div i {
-    position: relative;
-    left: 90%;
-    bottom: 10%;
-    color: #DC143C;
+.icon-wrapper {
+  /* border: 1px solid black; */
+  text-align: right;
+  padding: 0px 5px 10px 0px;
+}
+
+.users .icon-wrapper i .bi-file-person-fill{
+  color: #DC143C;
+
 }
 
 /* STYLING THE TABLE */
-.table-hotel {
-    font-family: Arial, Helvetica, sans-serif;
-    border-collapse: collapse;
-    width: 100%;
-    border: 1px solid;
-  }
-  /* .table-hotel tr {
-      border-top: 1px solid #96A7C6;
-  } */
-  
-  .table-hotel td,
-  .table-hotel th {
-    /* border-top: 1px solid #96A7C6;
-      border-bottom: 1px solid #96A7C6; */
-    padding: 8px;
-  }
-  
-  .table-hotel tr {
-    border-bottom: 1px solid black;
-    border-top: 1px solid black;
-    border-collapse: collapse;
-  }
-  
-  ​.table-hotel tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-  
-  .table-hotel tr:hover {
-    background-color: #ddd;
-  }
-  
-  .table-hotel th {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    text-align: left;
-  }
-  
-  .table-hotel th span {
-    color: #96a7c6;
-  }
-  
-  .id-cell {
-    display: flex;
-    align-items: center;
-  }
-  
-  .table-hotel td button {
-    color: red;
-    border: 1px dotted red;
-    border-radius: 5px;
-    padding: 4px;
-  }
+.table-transaction {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid;
+  margin-top: 20px;
+}
+
+
+.table-transaction td,
+.table-transaction th {
+  padding: 8px;
+}
+
+.table-transaction tr {
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  border-collapse: collapse;
+}
+
+​.table-transaction tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table-transaction tr:hover {
+  background-color: #ddd;
+}
+
+.table-transaction th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+}
+
+.table-transaction th span {
+  color: #96a7c6;
+}
+
+.id-cell {
+  display: flex;
+  align-items: center;
+}
+
+.table-transaction td button {
+  color: red;
+  border: 1px dotted red;
+  border-radius: 5px;
+  padding: 4px;
+}

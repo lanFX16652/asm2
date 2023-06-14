@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const useFetchListHotel = (page) => {
   const [listHotelData, setListHotelData] = useState();
+  const adminToken = useSelector((state) => state.auth.currentUser?.accessToken);
 
   useEffect(() => {
     axios({
       method: "GET",
-      url: "http://localhost:5000/hotel/list",
+      url: "http://localhost:5000/admin/hotel/list",
       params: {
         page: page,
         limit: 10,
       },
+      headers: {
+        Authorization: `Bearer ${adminToken}`
+      }
     }).then((result) => {
       setListHotelData(result.data);
     });
@@ -20,11 +25,14 @@ const useFetchListHotel = (page) => {
   const refetch = () => {
     axios({
       method: "GET",
-      url: "http://localhost:5000/hotel/list",
+      url: "http://localhost:5000/admin/hotel/list",
       params: {
         page: page,
         limit: 10,
       },
+      headers: {
+        Authorization: `Bearer ${adminToken}`
+      }
     }).then((result) => {
       setListHotelData(result.data);
     });

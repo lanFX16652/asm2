@@ -3,31 +3,31 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const transactionSchema = new Schema({
-    user: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'user' 
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
     },
     hotel: {
-       type: Schema.Types.ObjectId,
-       ref: 'hotel'
+        type: Schema.Types.ObjectId,
+        ref: 'hotel'
     },
-    room: {
+    rooms: {
         type: [Schema.Types.ObjectId],
         ref: 'room',
     },
-    roomNumber: {
+    roomsNumber: {
         type: [Number]
     },
     dateStart: {
-        type: String,
+        type: Date,
         required: true,
     },
     dateEnd: {
-        type: String,
+        type: Date,
         required: true,
     },
     price: {
-        type: String,
+        type: Number,
         required: true,
     },
     payment: {

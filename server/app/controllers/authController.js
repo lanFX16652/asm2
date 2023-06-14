@@ -1,17 +1,8 @@
-const User = require("../models/userModel");
-const Hotel = require("../models/hotelModel");
-const bcrypt = require('bcryptjs');
+import User from "../models/userModel";
+import bcrypt from 'bcryptjs';
+import jwt from "jsonwebtoken";
 
 
-// const jwt = require("jsonwebtoken");
-
-// const encodedToken = (userId) => {
-//     return JWTsign({
-//         sub: userId,
-//         iat: new Date().getTime(),
-//         exp: new Date().setDate(new Date().getDate())
-//     }, "NodejsApiAuthentication")
-// }
 
 // const signUp = async (req, res, next) => {
 //     console.log("Called to signUp function");
@@ -70,32 +61,67 @@ const bcrypt = require('bcryptjs');
 //     return res.status(201).json({ success: true })
 // }
 
-// const logIn = (req, res, next) => {
-//     const data = req.body;
-//     const email = req.body.email;
-//     const password = req.body.password;
-//     User.findOne({ email: email })
-//         .then(user => {
-//             if (!user) {
-//                 return res.redirect("/login");
-//             };
-//             bcrypt
-//                 .compare(password, user.password)
-//                 .then(doMatch => {
-//                     if (doMatch) {
-//                         return res.redirect("/")
-//                     }
-//                     res.redirect("/login");
-//                 })
-//                 .catch(err => {
-//                     console.log(err);
-//                     res.redirect("/login");
-//                 })
-//         })
+const signJWT = (user) => {
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+}
 
-//     const accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET);
-//     res.json({ accessToken });
-// };
+const logIn = (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    User.findOne({ email: email })
+        .then(user => {
+            if (!user) {
+                return res.status(400).json({ message: "Email/Mat Khau khong hop le" })
+            };
+
+            bcrypt
+                .compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        const accessToken = signJWT(user.toObject())
+                        res.json({ accessToken, user });
+                    } else {
+                        return res.status(400).json({ message: "Email/Mat Khau khong hop le" })
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json({ message: "Server khong hoat dong" })
+                })
+        })
+};
+
+
+const adminLogIn = (req, res, next) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    User.findOne({ email: email })
+        .then(user => {
+            if (!user) {
+                return res.status(400).json({ message: "Email/Mat Khau khong hop le" })
+            };
+
+            bcrypt
+                .compare(password, user.password)
+                .then(doMatch => {
+                    if (doMatch) {
+                        if (!user.isAdmin) {
+                            return res.status(400).json({ message: "Ban khong phai admin" })
+                        }
+
+                        const accessToken = signJWT(user.toObject())
+                        res.json({ accessToken, user });
+                    } else {
+                        return res.status(400).json({ message: "Email/Mat Khau khong hop le" })
+                    }
+                })
+                .catch(err => {
+                    console.log(err);
+                    res.status(500).json({ message: "Server khong hoat dong" })
+                })
+        })
+};
 
 const register = async (req, res) => {
     try {
@@ -106,16 +132,18 @@ const register = async (req, res) => {
         const newUser = await new User({
             username: req.body.username,
             password: hashed,
-            fullname: req.body.fullname,
+            fullName: req.body.fullName,
             phoneNumber: req.body.phoneNumber,
             email: req.body.email,
         })
 
         //Save to DB
         const user = await newUser.save();
-        res.status(200).json(user);
+        const accessToken = signJWT(user.toObject())
 
+        res.json({ accessToken, user: user });
     } catch (err) {
+        console.log(err)
         res.status(500).json(err);
     }
 }
@@ -173,16 +201,13 @@ const postSignup = (req, res, next) => {
 }
 
 const postLogin = (req, res) => {
-    console.log(req.body);
     const email = req.body.email;
-    console.log(email);
     const password = req.body.password;
     User.findOne({ email: email })
         .then(user => {
             if (!user) {
                 return res.status(400).json({ message: "Not found user" })
             } else {
-                console.log("user: ", user)
                 bcrypt
                     .compare(password, user.password)
                     .then(doMatch => {
@@ -199,7 +224,6 @@ const postLogin = (req, res) => {
                                 message: "Success",
                                 user: user
                             });
-                            console.log("user tra ve: ", user);
                         } else {
                             res.status(400).json({ message: "Password is not correct!" })
                         }
@@ -226,7 +250,7 @@ const logOut = (req, res) => {
 }
 
 // module.exports = { register, logIn, logOut };
-module.exports = { register, postSignup, postLogin, logOut };
-
+// export { register, postSignup, postLogin, logOut, logIn };
+export { register, logIn, logOut, adminLogIn }
 
 //https://viblo.asia/p/nodejs-bat-dau-voi-authentication-ORNZq6n3l0n

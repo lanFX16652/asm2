@@ -7,7 +7,7 @@ const useFetchHotelDetail = (hotelId) => {
   const fetchHotelDetail = () => {
     axios({
       method: "GET",
-      url: `http://localhost:5000/hotel/${hotelId}`,
+      url: `http://localhost:5000/client/hotel/${hotelId}`,
     }).then((result) => {
       setHotelDetail(result.data);
     });

@@ -54,6 +54,12 @@
   color: white;
   border: none;
   padding: 7px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .calendar-box-wrapper {

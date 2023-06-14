@@ -1,16 +1,21 @@
 import {useState, useEffect} from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const useFetchListRoom = (page) => {
     const [listRoomData, setListRoomData] = useState();
+    const adminToken = useSelector((state) => state.auth.currentUser?.accessToken);
 
     const refetch = (page) => {
         axios({
             method: "GET",
-            url: "http://localhost:5000/room/list",
+            url: "http://localhost:5000/admin/room/list",
             params: {
                 page: page,
                 limit: 10,
+            },
+            headers: {
+                Authorization: `Bearer ${adminToken}`
             }
         })
         .then((result) => {

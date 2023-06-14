@@ -1,12 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
 import { RouterProvider } from 'react-router-dom';
-import {router} from './routers/router'
+import { router } from './routers/router'
+import { Provider } from 'react-redux'
+import reduxStore from './redux/store'
+
+const store = reduxStore
 
 function App() {
   return (
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
 }
 
 export default App;
+
+
+
+

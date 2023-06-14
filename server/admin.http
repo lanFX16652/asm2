@@ -27,3 +27,14 @@ Content-Type: application/json
     "rating": 5,
     "featured": "Yes"
 }
+
+#######
+
+POST http://localhost:5000/client/hotel/search
+Content-Type: application/json
+
+{
+    "city": "ho chi minh",
+    "people": 6,
+    "timeRange": "{{$timestamp}}"
+}

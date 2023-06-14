@@ -7,7 +7,7 @@ const useFetchListRoom = (roomId) => {
     const refetch = (roomId) => {
         axios({
             method: "GET",
-            url: "http://localhost:5000/room-number",
+            url: "http://localhost:5000/client/room-number",
             params: roomId
         })
             .then((result) => {

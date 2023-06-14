@@ -3,10 +3,15 @@ import classes from "./Hotel.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import useFetchListHotel from "../../hooks/useFetchListHotel";
+import { useSelector } from "react-redux";
 
 const Hotel = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
+
+  const token = useSelector((state) => state.auth.currentUser?.accessToken);
+
+  console.log(token);
 
   const { listHotel, currentPage, limit, totalPage, totalHotel, refetch } =
     useFetchListHotel(page);
@@ -35,36 +40,38 @@ const Hotel = () => {
         </div>
         <div className={classes.padding}>
           <table className={classes["table-hotel"]}>
-            <tr>
-              <th>
-                <i class="bi bi-square"></i>
-                <span> | </span>ID
-              </th>
-              <th>
-                <span>| </span>Name
-              </th>
-              <th>
-                <span>| </span>Type
-              </th>
-              <th>
-                <span>| </span>Title
-              </th>
-              <th>
-                <span>| </span>City
-              </th>
-              <th>
-                <span>| </span>Action
-              </th>
-            </tr>
+            <thead>
+              <tr>
+                <th>
+                  <i className="bi bi-square"></i>
+                  <span> | </span>ID
+                </th>
+                <th>
+                  <span>| </span>Name
+                </th>
+                <th>
+                  <span>| </span>Type
+                </th>
+                <th>
+                  <span>| </span>Title
+                </th>
+                <th>
+                  <span>| </span>City
+                </th>
+                <th>
+                  <span>| </span>Action
+                </th>
+              </tr>
+            </thead>
 
-            {listHotel.map((hotel) => {
-              return (
-                <>
-                  <tr>
+            <tbody>
+              {listHotel.map((hotel) => {
+                return (
+                  <tr key={hotel._id}>
                     <td className={classes["id-cell"]}>
                       <span className={classes["checkbox-container"]}>
                         <input type="checkbox"></input>
-                        <span class="checkmark"></span>
+                        <span className="checkmark"></span>
                       </span>
                       {hotel._id}
                     </td>
@@ -77,7 +84,10 @@ const Hotel = () => {
                         onClick={() => {
                           axios({
                             method: "DELETE",
-                            url: `http://localhost:5000/hotel/delete/${hotel._id}`,
+                            url: `http://localhost:5000/admin/hotel/delete/${hotel._id}`,
+                            headers: {
+                              Authorization: `Bearer ${token}`,
+                            },
                           }).then((result) => {
                             if (result.status === 200) {
                               refetch();
@@ -89,9 +99,9 @@ const Hotel = () => {
                       </button>
                     </td>
                   </tr>
-                </>
-              );
-            })}
+                );
+              })}
+            </tbody>
           </table>
           <div className={classes["paginate-wrapper"]}>
             <div className={classes["paginate-page"]}>
@@ -103,6 +113,7 @@ const Hotel = () => {
               </button>
               {Array.from(Array(totalPage).keys()).map((item) => (
                 <button
+                  key={item}
                   disabled={currentPage === item + 1}
                   onClick={() => choosePageHandler(item + 1)}
                 >

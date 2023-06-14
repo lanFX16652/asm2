@@ -1,16 +1,17 @@
 import express from "express";
 import { getRoomNumberList, listRoom, createRoom, deleteRoom } from "../controllers/roomController";
+import {authMiddleware} from "../middleware/is-auth";
 
 const router = express.Router();
 
 const roomWebRoute = (app) => {
     // For Admin Page
-    router.get("/room/list", listRoom);
-    router.post("/room/create", createRoom);
-    router.delete("/room/delete/:id", deleteRoom);
+    router.get("/admin/room/list", authMiddleware, listRoom);
+    router.post("/admin/room/create", authMiddleware, createRoom);
+    router.delete("/admin/room/delete/:id", authMiddleware, deleteRoom);
 
     // For Client Page
-    router.get("/room-number/:id", getRoomNumberList);
+    router.get("/client/room-number/:id", getRoomNumberList);
     return app.use("/", router);
 }
 

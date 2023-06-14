@@ -1,12 +1,19 @@
 import express from "express";
-import { createTransaction } from "../controllers/transactionController";
+import { createTransaction, listTransaction, userTransaction } from "../controllers/transactionController";
+import {authMiddleware} from "../middleware/is-auth";
 
 
 // khoi tao router
 const router = express.Router();
 
 // them cac api cho routes hanlder
-router.post('/transaction/create', createTransaction);
+//For Admin Page
+router.get('/admin/transaction/list/all', authMiddleware, listTransaction);
+
+// For Client Page
+router.post('/client/transaction/create', createTransaction);
+router.get('/client/transaction/list/user/:userId', userTransaction);
+
 
 
 const transactionRoute = router

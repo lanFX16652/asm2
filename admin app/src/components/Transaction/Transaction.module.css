@@ -1,0 +1,133 @@
+.dashboard-wrapper {
+  width: 100%;
+  padding: 10px 20px;
+  /* border: 1px solid black; */
+}
+
+.users-orders-earnings-balance-wrapper {
+  width: 100%;
+  display: flex;
+  margin: 10px;
+  column-gap: 30px;
+}
+
+.users {
+  width: 22%;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px 4px #88888839;
+}
+
+.orders {
+  width: 22%;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px 4px #88888839;
+}
+
+.earnings {
+  width: 22%;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px 4px #88888839;
+}
+
+.balance {
+  width: 22%;
+  padding: 0px 10px;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px 4px #88888839;
+}
+
+.users-orders-earnings-balance-wrapper div h2 {
+  font-weight: 100;
+}
+
+.icon-wrapper {
+  /* border: 1px solid black; */
+  text-align: right;
+  padding: 0px 5px 10px 0px;
+}
+
+.users .icon-wrapper i .bi-file-person-fill {
+  color: #dc143c;
+}
+
+/* STYLING THE TABLE */
+.table-transaction {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid;
+  margin-top: 20px;
+}
+
+.table-transaction td,
+.table-transaction th {
+  padding: 8px;
+}
+
+.table-transaction tr {
+  border-bottom: 1px solid black;
+  border-top: 1px solid black;
+  border-collapse: collapse;
+}
+
+​.table-transaction tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table-transaction tr:hover {
+  background-color: #ddd;
+}
+
+.table-transaction th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+}
+
+.table-transaction th span {
+  color: #96a7c6;
+}
+
+.id-cell {
+  display: flex;
+  align-items: center;
+}
+
+.table-transaction td button {
+  color: red;
+  border: 1px dotted red;
+  border-radius: 5px;
+  padding: 4px;
+}
+
+
+.paginate-wrapper {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .paginate-action button {
+    margin-right: 8px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+  }
+  
+  .paginate-action button:hover {
+    background-color: #4b21f3;
+  }
+  
+  .paginate-action button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }

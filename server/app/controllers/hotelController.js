@@ -1,9 +1,10 @@
-const Hotel = require("../models/hotelModel");
-
+// const Hotel = require("../models/hotelModel");
+import Hotel from "../models/hotelModel";
+import Room from "../models/roomModel";
+import Transaction from "../models/transactionModel";
 
 // CONTROLLERS FOR ADMIN PAGE
 const createHotel = async (req, res) => {
-    console.log(req.body);
 
     //Create new hotel
     const newHotel = await new Hotel({
@@ -30,7 +31,6 @@ const createHotel = async (req, res) => {
 }
 
 const listHotel = async (req, res) => {
-    // console.log(req)
 
     const page = +req.query.page;
     const limit = +req.query.limit;
@@ -52,49 +52,99 @@ const listHotel = async (req, res) => {
 }
 
 const deleteHotel = async (req, res) => {
-    console.log(req.params);
     const deletedHotel = await Hotel.deleteOne({ _id: req.params.id });
     res.status(200).json({ message: "delete succeed" })
-}; 
+};
 
 
 // ***************************
 // CONTROLLERS FOR CLIENT PAGE
 const homepage = (req, res) => {
     Hotel.find({})
-    .then(result => {
-        console.log(result);
-        res.status(200).json({
-            message: "success",
-            hotels: result,
+        .then(result => {
+            res.status(200).json({
+                message: "success",
+                hotels: result,
+            })
         })
-    })
-    .catch(err => console.log(err))
+        .catch(err => console.log(err))
 }
 
-const searchHotel = (req, res) => {
-    console.log(req.query);
-    const place = req.query.place;;
-    const time = req.query.timeRange;
-    const people = req.query.people
-    console.log(keyword);
+const searchHotel = async (req, res) => {
+    const city = req.body.city;
+    const timeRange = req.body.timeRange;
+    const people = req.body.people;
+    console.log(req.body);
+    const page = +req.query.page;
+    const limit = +req.query.limit;
 
-    Hotel.find({room})
-    .then(result => {
-        console.log(result);
-        res.status(200).json({result: result})
+    const listHotelFilterCity = await Hotel.find({
+        city: {
+            $regex: city.trim(),
+            $options: 'i'
+        },
+    }, {}, {}).populate('rooms')
+
+    const listHotelFilterCityRoom = listHotelFilterCity.filter(hotel => {
+        let isReturn = false
+        let newHotel = hotel
+
+        // lap qua tung room o tron rooms cua hotel nay
+        //  room.maxPeople lon hoac bang people yeu cau => isReturn = true
+        const newRooms = hotel.rooms.map(room => {
+            if (room.maxPeople >= people) {
+                isReturn = true
+                return room
+            }
+        }).filter(Boolean)
+
+        // neu isReturn = true return hotel nay
+        // neu khong khong tra ve ket qua
+        if (isReturn) {
+            newHotel.rooms = newRooms
+            return newHotel
+        }
     })
-    .catch(err => console.log(err))
+
+    const listHotelId = listHotelFilterCityRoom.map(hotel => {
+        return hotel._id
+    })
+
+
+    const transactionList = await Transaction.find({
+        hotel: {
+            $in: listHotelId
+        }
+    })
+
+
+    const transactionBooked = transactionList.filter(transaction => {
+        // cua transaction
+        const dateHadBooked = [new Date(transaction.dateStart).getTime(), new Date(transaction.dateEnd).getTime()]
+
+        // client gui len 
+        const dateRequest = [new Date(timeRange.startDate).getTime(), new Date(timeRange.endDate).getTime()]
+
+        // startDateRequest <= startDateTransaction && endDateRequest <= endDateTransaction
+        if (dateRequest[0] <= dateHadBooked[0] && dateHadBooked[0] <= dateRequest[1]) {
+            return true
+        }
+        return false
+    })
+
+    console.log(transactionBooked);
+    res.status(200)
+
 }
 
 const hotelDetail = (req, res) => {
-    console.log(req.params);
 
     Hotel.findById(req.params.id)
-    .then((result) => {
-        res.status(200).json(result)
-    })
-    .catch(err => console.log(err))
+        .then((result) => {
+            res.status(200).json(result)
+        })
+        .catch(err => console.log(err))
 }
 
-module.exports = {createHotel, listHotel, deleteHotel, homepage, searchHotel, hotelDetail}
+// module.exports = { createHotel, listHotel, deleteHotel, homepage, searchHotel, hotelDetail }
+export { createHotel, listHotel, deleteHotel, homepage, searchHotel, hotelDetail }

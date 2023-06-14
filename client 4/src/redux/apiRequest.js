@@ -5,8 +5,10 @@ import { updateDataSearch } from "./searchSlice";
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
-        const res = await axios.post("http://localhost:5000/login", user);
-        dispatch(loginSuccess(res.data));
+        const res = await axios.post("http://localhost:5000/client/login", user);
+
+        localStorage.setItem('userData', JSON.stringify(res.data))
+        dispatch(loginSuccess(res.data.user));
         navigate("/");
     } catch (err) {
         dispatch(loginFailed());
@@ -16,7 +18,7 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerStart());
     try {
-        await axios.post("http://localhost:5000/signup", user);
+        await axios.post("http://localhost:5000/client/signup", user);
         dispatch(registerSuccess());
         navigate("/");
     } catch (err) {
@@ -27,7 +29,7 @@ export const registerUser = async (user, dispatch, navigate) => {
 export const logOut = async (dispatch, navigate) => {
     dispatch(logoutStart());
     try {
-        await axios.get("http://localhost:5000/logout")
+        await axios.get("http://localhost:5000/client/logout")
         dispatch(logoutSuccess());
         navigate("/")
     } catch (err) {
@@ -37,7 +39,7 @@ export const logOut = async (dispatch, navigate) => {
 
 export const searchHotel = async (dispatch, navigate) => {
     try {
-        const res = await axios.post("http://localhost:5000/hotel/search")
+        const res = await axios.post("http://localhost:5000/client/hotel/search")
         dispatch(updateDataSearch(res.data));
         navigate("/search")
     } catch (err) {

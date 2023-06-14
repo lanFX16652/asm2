@@ -1,21 +1,20 @@
 import express from "express";
-import adminController from "../controllers/adminController";
-import webController from "../controllers/webController";
-import hotelController from "../controllers/hotelController"
-
+// import hotelController from "../controllers/hotelController"
+import {createHotel, listHotel, deleteHotel, homepage, searchHotel, hotelDetail} from "../controllers/hotelController";
+import {authMiddleware} from "../middleware/is-auth"
 
 const router = express.Router();
 
 const hotelWebRoute = (app) => {
     // For Admin Page
-    router.get("/hotel/list", hotelController.listHotel);
-    router.post("/hotel/create", hotelController.createHotel);
-    router.delete("/hotel/delete/:id", hotelController.deleteHotel);
+    router.get("/admin/hotel/list", authMiddleware, listHotel);
+    router.post("/admin/hotel/create", authMiddleware, createHotel);
+    router.delete("/admin/hotel/delete/:id", authMiddleware, deleteHotel);
 
     // For Client Page
-    router.get("/homepage", hotelController.homepage);
-    router.post("/hotel/search", hotelController.searchHotel);
-    router.get("/hotel/:id", hotelController.hotelDetail);
+    router.get("/client/homepage", homepage);
+    router.post("/client/hotel/search", searchHotel);
+    router.get("/client/hotel/:id", hotelDetail);
     return app.use("/", router);
 };
 

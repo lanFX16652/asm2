@@ -6,16 +6,21 @@ import Room from "../components/Hotel/Room";
 import NewRoom from "../components/Hotel/NewRoom";
 import Transaction from "../components/Transaction/Transaction";
 import Dashboard from "../components/Dashboard/Dashboard";
-
+import Login from "../components/Login/Login";
+import AuthWrapper from "../components/AuthWrapper/AuthWrapper";
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element: (
+      <AuthWrapper>
+        <Layout />
+      </AuthWrapper>
+    ),
     children: [
       {
         path: "dashboard",
-        element: <Dashboard/>
+        element: <Dashboard />,
       },
       {
         path: "hotel/list",
@@ -27,7 +32,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "room/list",
-        element: <Room/>
+        element: <Room />,
       },
       {
         path: "room/create",
@@ -35,8 +40,17 @@ export const router = createBrowserRouter([
       },
       {
         path: "transaction/list",
-        element: <Transaction/>
-      }
+        element: <Transaction />,
+      },
     ],
   },
+  {
+    path: "/login",
+    element: (
+      <AuthWrapper>
+        <Login />
+      </AuthWrapper>
+    ),
+  },
+  
 ]);

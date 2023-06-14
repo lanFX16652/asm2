@@ -9,4 +9,17 @@
 .content-header {
     height: 10vh;
     border-bottom: 1px solid #96A7C6;
+    text-align: right;
+}
+
+.content-header button {
+    cursor: pointer;
+    border: none;
+    align-self: center;
+    margin: 1rem 3rem ;
+    font-size: 1rem;
+    padding: 0.65rem;
+    border-radius: 4px;
+    color: white;
+    background-color: #0071C2;
 }

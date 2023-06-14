@@ -1,133 +1,255 @@
-import { useEffect } from 'react';
-import './SearchPage.css';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import classes from './SearchPage.module.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { DateRange } from "react-date-range";
+import { addDays, subDays } from "date-fns";
+import { updateDataSearch } from '../../redux/searchSlice';
+
 import axios from 'axios';
 
 function SearchPage() {
-    const search = useSelector((state) => state.search.search)
-    const navigate = useNavigate();
+    const dispatch = useDispatch()
+    const search = useSelector((state) => state.search.search);
+    const user = JSON.parse(localStorage.getItem("userData"));
+    // state list paginate
+    const [page, setPage] = useState(1);
+    const [hotelsListSearch, setHotelsListSearch] = useState([]);
 
-    useEffect(() => {
-        //Gọi API để hiển thị danh sách phim mà người dùng tìm kiếm
-        async function fetchSearchMovie(place, time, people) {
-            try {
-                const response = await fetch(
-                    `http://localhost:5000/search?place=${place}&time=${time}&people=${people}`,
-                    {
-                        method: "POST",
-                        // body: JSON.stringify({
-                        //     "keyword": query
-                        // }),
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                    }
-                );
-            } catch (err) {
-                const errorMessage = "Something went wrong: " + err.message;
-                // setError(errorMessage);
-            }
+    // state form 
+    const [city, setCity] = useState(search.city);
+    const [people, setPeople] = useState(search.people);
+    const [timechoose, setTimeChoose] = useState({ startDate: search.timeRange[0], endDate: search.timeRange[1] })
+
+    // state calender
+    const [popup, setPopup] = useState(false);
+    const [calendar, setCalendar] = useState([
+        {
+            startDate: subDays(new Date(), 7),
+            endDate: addDays(new Date(), 1),
+            key: "selection"
         }
-    }, [])
+    ]);
+    const [countSelectDate, setCountSelectDate] = useState(0)
 
-    const fetchHotelDetail = (hotelId) => {
+    const isSearchAble = city && people && timechoose
+
+    const handleOnChange = (ranges) => {
+        const { selection } = ranges;
+        setCalendar([selection]);
+        setCountSelectDate(countSelectDate + 1)
+    };
+
+    const fetchHotelSearch = () => {
         axios({
-            method: "GET",
-            url: `http://localhost:5000/hotel/${hotelId}`
+            method: "POST",
+            url: "http://localhost:5000/client/hotel/search",
+            data: {
+                city,
+                people,
+                timeRange: {
+                    startDate: calendar[0].startDate,
+                    endDate: calendar[0].endDate
+                }
+            },
+            params: {
+                page: page,
+                limit: 2,
+            },
+            headers: {
+                Authorization: `Bearer ${user?.accessToken}`,
+            },
         })
-        .then(result => {
-            console.log(result);
-            navigate(`/hotel/${hotelId}`)
-        })
+            .then((result) => {
+                setHotelsListSearch(result.data);
+            })
     }
 
+    // logic search: gui thong tin search vao redux
+    const searchHanlder = () => {
+        dispatch(updateDataSearch({
+            city,
+            timeRange: [calendar[0].startDate.toLocaleDateString('en-GB'), calendar[0].endDate.toLocaleDateString('en-GB')],
+            people,
+        }))
+        fetchHotelSearch()
+
+    }
+
+    const nextPageHandler = () => {
+        setPage(page + 1);
+    };
+
+    const prevPageHandler = () => {
+        setPage(page - 1);
+    };
+
+    const choosePageHandler = (page) => {
+        setPage(page);
+    };
+
+    const handleClickOpen = () => {
+        if (!popup)
+            setPopup(true);
+    };
+
+    useEffect(() => {
+        fetchHotelSearch();
+    }, [])
+
+
+    useEffect(() => {
+        if (countSelectDate === 2) {
+            setPopup(false)
+            const startDate = calendar[0].startDate.toLocaleDateString('en-US');
+            const endDate = calendar[0].endDate.toLocaleDateString('en-US');
+            setTimeChoose({
+                startDate,
+                endDate
+            })
+            setCountSelectDate(0)
+        }
+    }, [countSelectDate])
+
     return (
-        <div className='searchPage'>
+        <div className={classes['searchPage']}>
+
             {/* search frame */}
+            <div className={classes["popup-container"]}>
+                <h2 className={classes["search-title"]}>Search</h2>
 
-            <div className="popup-container">
-                <h2 className="search-title">Search</h2>
-
-                <div className="destination-wrap">
+                <div className={classes["destination-wrap"]}>
                     <p>Destination</p>
-                    <input className="popup-input"></input>
+                    <input className={classes["popup-input"]} value={city} onChange={(e) => setCity(e.target.value)}></input>
                 </div>
 
-                <div className="date-wrap">
+                <div className={classes["date-wrap"]} onClick={handleClickOpen}>
                     <p>Check-in Date</p>
                     <input
-                        className="popup-input"
-                        placeholder="06/24/2022 to 06/24/2022"
+                        value={`${timechoose.startDate.toLocaleDateString('en-US')} to ${timechoose.endDate.toLocaleDateString('en-US')}`}
+                        className={classes["popup-input"]}
                     ></input>
+                    <div className="calendar-box">
+                        {popup ? (
+                            <DateRange
+                                editableDateInputs={true}
+                                moveRangeOnFirstSelection={false}
+                                className="date"
+                                minDate={new Date()}
+                                showSelectionPreview={true}
+                                onChange={handleOnChange}
+                                ranges={calendar}
+                            />
+                        ) : (
+                            ""
+                        )}
+                    </div>
                 </div>
 
                 <div>
                     <p>Options</p>
-                    <div className="option-input-wrap">
-                        <div className="option-wrap">
+                    <div className={classes["option-input-wrap"]}>
+                        <div className={classes["option-wrap"]}>
                             <p>Min price per night</p>
-                            <input className="option-input"></input>
+                            <input className={classes["option-input"]}></input>
                         </div>
 
-                        <div className="option-wrap">
+                        <div className={classes["option-wrap"]}>
                             <p>Max price per night</p>
-                            <input className="option-input"></input>
+                            <input className={classes["option-input"]}></input>
                         </div>
 
-                        <div className="option-wrap">
+                        <div className={classes["option-wrap"]}>
                             <p>Adult</p>
-                            <input className="option-input" placeholder="1"></input>
+                            <input className={classes["option-input"]} placeholder="1"></input>
                         </div>
 
-                        <div className="option-wrap">
+                        <div className={classes["option-wrap"]}>
                             <p>Children</p>
-                            <input className="option-input" placeholder="0"></input>
+                            <input className={classes["option-input"]} placeholder="0"></input>
                         </div>
 
-                        <div className="option-wrap">
+                        <div className={classes["option-wrap"]}>
                             <p>Room</p>
-                            <input className="option-input" placeholder="1"></input>
+                            <input className={classes["option-input"]} placeholder="1"></input>
+                        </div>
+                        <div className={classes["option-wrap"]}>
+                            <p>Max People</p>
+                            <input className={classes["option-input"]} value={search.people} onChange={(e) => setPeople(e.target.value)}></input>
                         </div>
                     </div>
 
-                    <button className="popup-searchBtn">Search</button>
+
+                    <button className={classes["popup-searchBtn"]} disabled={!isSearchAble} onClick={searchHanlder}>Search</button>
                 </div>
             </div>
 
+            <div className={classes['hotel-list-wrapper']}>
+                {/* Searched-result rendering */}
+                <div className={classes["search-container"]}>
+                    {hotelsListSearch?.result?.map((hotel) => {
+                        return (
+                            <div className={classes['searchHotel-item']}>
+                                <div className={classes["search-image-container"]}>
+                                    <img src={process.env.PUBLIC_URL + '/images/hotel_1.webp'}></img>
+                                </div>
 
-            {/* Searched-result rendering */}
-            <div className="search-container">
-                <div className='searchHotel-item'>
-                    <div className="search-image-container">
-                        <img src={process.env.PUBLIC_URL + '/images/hotel_1.webp'}></img>
+                                <div className={classes["hotel-content"]}>
+                                    <h2 className={classes["hotel-name"]}>{hotel.name}</h2>
+                                    <p>{hotel.distance}</p>
+                                    <p className={classes["hotel-tag"]}>aaa</p>
+                                    <p className={classes["hotel-description"]}>{hotel.description}</p>
+                                    <p>{hotel.type}</p>
+                                    <p className={classes["cancel"]}>Free cancellation</p>
+                                    <p className={classes["inviting"]}>
+                                        You can cancel later, so lock in this great price today!
+                                    </p>
+                                </div>
+
+                                <div className={classes["rate-container"]}>
+                                    <div className={classes["rate-wrap"]}>
+                                        <span className="rate-text">{hotel.rating}</span>
+                                        <span className={classes["rate-point"]}>{hotel.rating}</span>
+                                    </div>
+                                    <div>
+                                        <h2 className={classes["hotelPrice"]}>${hotel.price}</h2>
+                                        <p className={classes["tax"]}>Includes taxes and fees</p>
+                                        <button className={classes["availabilityBtn"]}>See Availability</button>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+
+                <div className={classes["paginate-wrapper"]}>
+                    <div className={classes["paginate-page"]}>
+                        {hotelsListSearch?.totalSearchHotel} hotel / page {page}
                     </div>
+                    <div className={classes["paginate-action"]}>
+                        <button onClick={prevPageHandler} disabled={page === 1}>
+                            Trang trước
+                        </button>
+                        {Array.from(Array(hotelsListSearch?.totalPage).keys()).map((item) => (
+                            <button
+                                key={item}
+                                disabled={hotelsListSearch?.page === item + 1}
+                                onClick={() => choosePageHandler(item + 1)}
+                            >
+                                {item + 1}
+                            </button>
+                        ))}
 
-                    <div className="hotel-content">
-                        <h2 className="hotel-name">Lagoon</h2>
-                        <p>640m from center</p>
-                        <p className="hotel-tag">aaa</p>
-                        <p className="hotel-description">Beautiful</p>
-                        <p>Villa</p>
-                        <p className="cancel">Free cancellation</p>
-                        <p className="inviting">
-                            You can cancel later, so lock in this great price today!
-                        </p>
-                    </div>
-
-                    <div className="rate-container">
-                        <div className="rate-wrap">
-                            <span className="rate-text">9points</span>
-                            <span className="rate-point">9</span>
-                        </div>
-                        <div>
-                            <h2 className="hotelPrice">$900</h2>
-                            <p className="tax">Includes taxes and fees</p>
-                            <button className="availabilityBtn">See Availability</button>
-                        </div>
+                        <button
+                            disabled={hotelsListSearch?.page === hotelsListSearch?.totalPage}
+                            onClick={nextPageHandler}
+                        >
+                            Trang sau
+                        </button>
                     </div>
                 </div>
+
             </div>
+
         </div>
     )
 }

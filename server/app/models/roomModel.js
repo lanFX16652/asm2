@@ -19,12 +19,12 @@ const roomSchema = new Schema({
         type: Number,
         required: true,
     },
-    roomNumbers: {
+    roomsNumber: {
         type: [Number], // 1 , 2, 3
         required: true,
     },
-    roomBooked: {
-        type: [Number], 
+    roomsBooked: {
+        type: [Number],
     },
 });
 

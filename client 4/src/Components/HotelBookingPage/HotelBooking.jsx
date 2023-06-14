@@ -7,18 +7,18 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import RoomItem from "./RoomItem/RoomItem";
 import { addDays, subDays } from "date-fns";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { createTransaction } from "../../redux/transactionSlice";
 
 const HotelBooking = () => {
-  // const [listRoomData, setListRoomData] = useState([]);
-  // const [roomsBook, setRoomsBook] = useState([]);
   const params = useParams();
   const user = useSelector((state) => state.auth.login.currentUser);
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [roomBookedData, setRoomBookedData] = useState([]);
-
-  console.log(roomBookedData);
-
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [payment, setPayment] = useState("");
   const [calendar, setCalendar] = useState([
     {
       startDate: new Date(),
@@ -27,7 +27,7 @@ const HotelBooking = () => {
     },
   ]);
 
-  const { name, description, rooms, hotelDetail } = useFetchHotelDetail(
+  const { name, description, rooms, price, hotelDetail } = useFetchHotelDetail(
     params.id
   );
 
@@ -35,20 +35,34 @@ const HotelBooking = () => {
     const { selection } = ranges;
     setCalendar([selection]);
   };
+  const roomArr = roomBookedData.map((item) => item.roomTypeId);
+  const roomNumberArr = roomBookedData.map((item) => item.roomsNumber).flat();
 
   const transactionSubmit = () => {
     const payload = {
       user: user._id,
       hotel: hotelDetail._id,
-      // room:
-      // roomNumber
-      // dateStart
-      // dateEnd
-      // price
-      // payment
-      // status
+      rooms: roomArr, // "3232321asdasdasd"
+      roomsNumber: roomNumberArr, // ["101",
+      dateStart: calendar[0].startDate,
+      dateEnd: calendar[0].endDate,
+      price: totalPrice,
+      payment: payment,
+      status: "Booked",
     };
+
+    axios({
+      method: "POST",
+      url: "http://localhost:5000/client/transaction/create",
+      data: payload,
+    }).then((result) => {
+      console.log(result);
+      dispatch(createTransaction(result.data));
+    });
+
+    navigate("/transactions");
   };
+
   return (
     <div className={classes["booking-form-wrapper"]}>
       <div className={classes["hotel-content-wrapper"]}>
@@ -58,7 +72,7 @@ const HotelBooking = () => {
         </div>
         <div className={classes["hotel-price-right"]}>
           <h2>
-            $a <span>{"(9-night)"}</span>
+            ${price} <span>{"(9-night)"}</span>
           </h2>
           <button className={classes.bookBtn}>Reserve or Book Now!</button>
         </div>
@@ -107,6 +121,8 @@ const HotelBooking = () => {
                 key={roomId}
                 roomId={roomId}
                 roomBookedData={roomBookedData}
+                calendar={calendar}
+                setTotalPrice={setTotalPrice}
                 setRoomBookedData={setRoomBookedData}
               />
             );
@@ -116,13 +132,26 @@ const HotelBooking = () => {
 
       <div className={classes["container-totalbill"]}>
         <div>
-          <h3>Total Bill:</h3>
-          <select placeholder="Select Payment Method">
-            <option>Credit Card</option>
-            <option>Cash</option>
+          <h3>Total Bill: {totalPrice}$</h3>
+          <select
+            onChange={(e) => {
+              setPayment(e.target.value);
+            }}
+          >
+            <option>Select Payment Method</option>
+            <option value="Credit Card">Credit Card</option>
+            <option value="Cash">Cash</option>
           </select>
         </div>
-        <button>Reserve Now</button>
+        <div>
+          <button
+            style={{ margin: "12px" }}
+            className={classes.bookBtn}
+            onClick={transactionSubmit}
+          >
+            Reserve Now
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -1,8 +1,11 @@
 import classes from "./NewHotel.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 const NewHotel = () => {
+  const adminToken = useSelector((state) => state.auth.currentUser?.accessToken);
+
   const [name, setName] = useState("");
   const [type, setType] = useState("");
   const [city, setCity] = useState("");
@@ -22,7 +25,7 @@ const NewHotel = () => {
     e.preventDefault();
     axios({
       method: "POST",
-      url: "http://localhost:5000/hotel/create",
+      url: "http://localhost:5000/admin/hotel/create",
       data: {
         name,
         type,
@@ -34,6 +37,9 @@ const NewHotel = () => {
         featured,
         rooms,
       },
+      headers: {
+        Authorization: `Bearer ${adminToken}`
+      }
     });
   };
 
@@ -41,11 +47,14 @@ const NewHotel = () => {
     const fetchListRoom = () => {
       axios({
         method: "GET",
-        url: "http://localhost:5000/room/list",
+        url: "http://localhost:5000/admin/room/list",
         params: {
           page: 1,
           limit: 10,
         },
+        headers: {
+          Authorization: `Bearer ${adminToken}`
+        }
       }).then((result) => {
         setListRoom(result.data.data);
       });

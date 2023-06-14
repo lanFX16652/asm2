@@ -1,13 +1,16 @@
 import express from 'express';
-import userController from "../controllers/authController";
+import { logIn, register, logOut, adminLogIn } from '../controllers/authController'
+import { authMiddleware } from '../middleware/is-auth';
 
-const router = express.Router()
+const authenticateRouter = express.Router()
 
-const userWebRoute = (app) => {
-    router.post("/signup", userController.postSignup);
-    router.post("/login", userController.postLogin);
-    router.get("/logout", userController.logOut);
-    return app.use("/", router);
-}
+authenticateRouter.post("/admin/login", adminLogIn);
+authenticateRouter.get("/admin/logout", authMiddleware, logOut);
 
-export default userWebRoute;
+
+authenticateRouter.post("/client/signup", register);
+authenticateRouter.post("/client/login", logIn);
+authenticateRouter.get("/client/logout", logOut);
+
+
+export { authenticateRouter };

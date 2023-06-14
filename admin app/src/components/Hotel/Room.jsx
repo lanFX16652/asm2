@@ -52,63 +52,67 @@ const Room = () => {
         </div>
         <div className={classes.padding}>
           <table className={classes["table-hotel"]}>
-            <tr>
-              <th>
-                <i class="bi bi-square"></i>
-                <span> | </span>ID
-              </th>
-              <th>
-                <span>| </span>Title
-              </th>
-              <th>
-                <span>| </span>Description
-              </th>
-              <th>
-                <span>| </span>Price
-              </th>
-              <th>
-                <span>| </span>Max People
-              </th>
-              <th>
-                <span>| </span>Action
-              </th>
-            </tr>
+            <thead>
+              <tr>
+                <th>
+                  <i className="bi bi-square"></i>
+                  <span> | </span>ID
+                </th>
+                <th>
+                  <span>| </span>Title
+                </th>
+                <th>
+                  <span>| </span>Description
+                </th>
+                <th>
+                  <span>| </span>Price
+                </th>
+                <th>
+                  <span>| </span>Max People
+                </th>
+                <th>
+                  <span>| </span>Action
+                </th>
+              </tr>
+            </thead>
 
-            {listRoom.map((room) => {
-              return (
-                <>
-                  <tr>
-                    <td className={classes["id-cell"]}>
-                      <span className={classes["checkbox-container"]}>
-                        <input type="checkbox"></input>
-                        <span class="checkmark"></span>
-                      </span>
-                      {room._id}
-                    </td>
-                    <td>{room.title}</td>
-                    <td>{room.description}</td>
-                    <td>{room.price}</td>
-                    <td>{room.maxPeople}</td>
-                    <td>
-                      <button
-                        onClick={() => {
-                          axios({
-                            method: "DELETE",
-                            url: `http://localhost:5000/room/delete/${room._id}`,
-                          }).then((result) => {
-                            if (result.status === 200) {
-                              refetch();
-                            }
-                          });
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                </>
-              );
-            })}
+            <tbody>
+              {listRoom.map((room) => {
+                return (
+                  
+                    <tr key={room._id}>
+                      <td className={classes["id-cell"]}>
+                        <span className={classes["checkbox-container"]}>
+                          <input type="checkbox"></input>
+                          <span className="checkmark"></span>
+                        </span>
+                        {room._id}
+                      </td>
+                      <td>{room.title}</td>
+                      <td>{room.description}</td>
+                      <td>{room.price}</td>
+                      <td>{room.maxPeople}</td>
+                      <td>
+                        <button
+                          onClick={() => {
+                            axios({
+                              method: "DELETE",
+                              url: `http://localhost:5000/room/delete/${room._id}`,
+                            }).then((result) => {
+                              if (result.status === 200) {
+                                refetch();
+                              }
+                            });
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  
+                );
+              })}
+            </tbody>
           </table>
 
           <div className={classes["paginate-wrapper"]}>
@@ -121,6 +125,7 @@ const Room = () => {
               </button>
               {Array.from(Array(totalPage).keys()).map((item) => (
                 <button
+                  key={item}
                   disabled={currentPage === item + 1}
                   onClick={() => choosePageHandler(item + 1)}
                 >

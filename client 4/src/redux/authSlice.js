@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
     name: "auth",
@@ -11,11 +11,11 @@ const authSlice = createSlice({
         register: {
             isFetching: false,
             error: false,
-            success: false,           
+            success: false,
         },
         logout: {
             isFetching: false,
-            error: false,            
+            error: false,
         }
     },
     reducers: {
@@ -60,7 +60,7 @@ const authSlice = createSlice({
 });
 
 export const {
-    loginStart, 
+    loginStart,
     loginSuccess,
     loginFailed,
     registerStart,

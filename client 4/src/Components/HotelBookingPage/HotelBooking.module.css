@@ -71,7 +71,6 @@
   margin: 0px 0px 15px 5px;
 }
 .bookBtn {
-  width: 230px;
   padding: 10px;
   background-color: rgb(68, 159, 238);
   color: white;
@@ -80,63 +79,61 @@
   font-weight: 600;
 }
 
-
 /* STYLING DATE AND RESERED INFO */
 .container-date-reservedinfo {
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
 }
 /* .daterange-wrapper {
    
 } */
 .reserveinfo-wrapper {
-    width: 60%;
+  width: 60%;
 }
-.input-wrapper input{
-    width: 100%;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 10px;
+.input-wrapper input {
+  width: 100%;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 10px;
 }
 
 /* STYLING SELECT ROOM */
 .container-selectrooms {
-    border: 1px solid black;
+  border: 1px solid black;
 }
 .doubleroom-twinroom-wrapper {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 .budget-doubleroom-wrapper {
-    width: 50%;
-    text-align: left;
+  width: 50%;
+  text-align: left;
 }
 .budgetdoubleroom-info-wrapper {
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
 }
 .left-content {
-    text-align: left;
-    width: 50%;
+  text-align: left;
+  width: 50%;
 }
 .right-content {
-    display: flex;
-    width: 40%;
+  display: flex;
+  width: 40%;
 }
 .budget-twinroom-wrapper {
-    width: 50%;
-    text-align: left;
+  width: 50%;
+  text-align: left;
 }
 .budgettwinroom-info-wrapper {
-    display: flex;
-    justify-content: space-between;
-    border: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid black;
 }
 
 /* STYLING TOTAL BILL */
 .container-totalbill {
-    display: flex;
+  display: flex;
 }
-

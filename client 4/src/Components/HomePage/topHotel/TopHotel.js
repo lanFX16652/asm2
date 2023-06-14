@@ -5,23 +5,8 @@ import { Link } from "react-router-dom";
 //Render Hotel on HomePage page
 //Parent Component
 function TopHotel(props) {
-  const {
-    name,
-    type,
-    city,
-    address,
-    distance,
-    photos,
-    description,
-    price,
-    rating,
-    featured,
-    rooms,
-    fetchHotelDetail,
-  } = useFetchHotelDetail();
+  const topHotels = props.hotels.sort((a, b) => b.rating - a.rating).slice(0, 3);
 
-  const topHotels = props.hotels.sort((a,b) => b.rating - a.rating).slice(0, 3);
-  console.log(topHotels);
   return (
     <div>
       <h2 className="hotel-title">Homes guests love</h2>
@@ -42,14 +27,12 @@ function TopHotel(props) {
               <h4 className="hotel-content">{topHotel?.city}</h4>
               <h4 className="hotel-content">Starting from {topHotel?.price}$</h4>
               <div className="hotel-rate">
-                <span className="rate">{topHotel?.rate}</span>
+                <span className="rate">{topHotel?.rating}</span>
                 <span>{topHotel?.type}</span>
               </div>
             </div>
           )
-        })}       
-
-
+        })}
       </div>
 
 

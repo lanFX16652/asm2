@@ -8,14 +8,21 @@ import cookieParser from "cookie-parser";
 import session from "express-session";
 
 
-import userWebRoute from "./routers/auth";
-import initWebRoute from "./routers/web";
-import adminWebRoute from "./routers/admin";
+import { authenticateRouter } from "./routers/auth";
 import hotelWebRoute from "./routers/hotel";
 import roomWebRoute from "./routers/room";
 import transactionRoute from './routers/transaction'
+import { authMiddleware } from "./middleware/is-auth";
 
-const MongoDBStore = require("connect-mongodb-session")(session);
+// import
+import mongodbSession from 'connect-mongodb-session'
+const MongoDBStore = mongodbSession(session);
+
+// required 
+// const MongoDBStore = require("connect-mongodb-session");
+// MongoDBStore(session)
+
+
 const MONGODB_URI = "mongodb://127.0.0.1:27017/asm2"
 dotenv.config();
 const app = express();
@@ -40,8 +47,13 @@ app.use(session({
 
 app.use(transactionRoute)
 
+// authenticate route 
+app.use(authenticateRouter)
+
+
+
 //init web routes
-userWebRoute(app);
+// userWebRoute(app);
 hotelWebRoute(app);
 roomWebRoute(app);
 // adminWebRoute(app);

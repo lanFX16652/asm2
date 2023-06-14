@@ -32,7 +32,7 @@ const HotelDetail = () => {
 
       <div>
         <div className={classes.address_wrap}>
-          <i class="fa fa-taxi"></i>
+          <i className="fa fa-taxi"></i>
           <p className={classes.address}>{address}</p>
         </div>
         <p className={classes.distance}>{distance}</p>

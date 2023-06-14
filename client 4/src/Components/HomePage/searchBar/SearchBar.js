@@ -3,19 +3,28 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { addDays, subDays } from "date-fns";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateDataSearch } from '../../../redux/searchSlice'
 
 function SearchBar() {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
     //Define useState for DateRange
-    const [place, setPlace] = useState("");
+    const [city, setCity] = useState("");
     const [people, setPeople] = useState(0);
     const [timechoose, setTimeChoose] = useState('')
 
-    const dispatch = useDispatch()
+    //Define handeleClick function to popup DateRange
+    const [popup, setPopup] = useState(false);
+
+    const handleClickOpen = () => {
+        if (!popup)
+            setPopup(true);
+    };
 
     // logic date picker
     const [calendar, setCalendar] = useState([
@@ -28,19 +37,22 @@ function SearchBar() {
 
     const [countSelectDate, setCountSelectDate] = useState(0)
 
+    const isSearchAble = city && people && timechoose
+
     const handleOnChange = (ranges) => {
         const { selection } = ranges;
         setCalendar([selection]);
         setCountSelectDate(countSelectDate + 1)
     };
 
-    // logic search 
+    // logic search: gui thong tin search vao redux
     const searchHanlder = () => {
-        updateDataSearch({
-            place,
+        dispatch(updateDataSearch({
+            city,
             timeRange: [calendar[0].startDate, calendar[0].endDate],
             people,
-        })
+        }))
+        navigate('/search')
     }
 
     useEffect(() => {
@@ -52,15 +64,6 @@ function SearchBar() {
             setCountSelectDate(0)
         }
     }, [countSelectDate])
-
-
-    //Define handeleClick function to popup DateRange
-    const [popup, setPopup] = useState(false);
-    const handleClickOpen = () => {
-        setPopup(!popup);
-    };
-
-
 
     return (
         <div className="wrapper">
@@ -74,19 +77,19 @@ function SearchBar() {
 
             <div className="input-container">
                 <div>
-                    <i class="bi bi-taxi-front"></i>
-                    {/* <i class="fa fa-bed"></i> */}
+                    <i className="bi bi-taxi-front"></i>
+                    {/* <i className="fa fa-bed"></i> */}
                     <input
                         className="input"
                         type="text"
                         placeholder="Where are you going?"
-                        onChange={(e) => setPlace(e.target.value)}
+                        onChange={(e) => setCity(e.target.value)}
                     ></input>
                 </div>
 
-                <div className="calendar-box-wrapper">
-                    <i class="bi bi-calendar3" onClick={handleClickOpen}></i>
-                    {/* <i class="fa fa-calendar" onClick={handleClickOpen}></i> */}
+                <div onClick={handleClickOpen} className="calendar-box-wrapper">
+                    <i className="bi bi-calendar3"></i>
+                    {/* <i className="fa fa-calendar" onClick={handleClickOpen}></i> */}
                     <input type="text" value={timechoose} className="input" placeholder="Enter Date"></input>
                     <div className="calendar-box">
                         {popup ? (
@@ -106,8 +109,8 @@ function SearchBar() {
                 </div>
 
                 <div>
-                    <i class="bi bi-person"></i>
-                    {/* <i class="fa fa-female"></i> */}
+                    <i className="bi bi-person"></i>
+                    {/* <i className="fa fa-female"></i> */}
                     <input
                         className="input"
                         type="number"
@@ -115,16 +118,13 @@ function SearchBar() {
                         onChange={(e) => setPeople(e.target.value)}
                     ></input>
                 </div>
-                <Link to='/search'>
-                    <button
-                        className="search"
-                        onClick={searchHanlder}
-                    >
-                        Search
-                    </button>
-                </Link>
-
-
+                <button
+                    className="search"
+                    disabled={!isSearchAble}
+                    onClick={searchHanlder}
+                >
+                    Search
+                </button>
             </div>
         </div>
     );
