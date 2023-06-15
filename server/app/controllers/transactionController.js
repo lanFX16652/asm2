@@ -1,4 +1,5 @@
 import Transaction from "../models/transactionModel";
+import Room from '../models/roomModel'
 
 const createTransaction = async (req, res) => {
     console.log(req.body);
@@ -17,6 +18,24 @@ const createTransaction = async (req, res) => {
 
     //save to database
     const transaction = await newTransaction.save();
+    req.body.rooms.map(roomId => {
+        const room = Room.findById(roomId)
+
+        [
+            {
+                roomNumberBooked: '101'
+                
+            },
+            {
+                roomNumberBooked: '201'
+            }
+        ]
+        const roomsNumberBooked = req.body.roomsNumber.map(roomNumber => ({
+            roomNumberBooked: roomNumber,
+            dateStart: req.body.dateStart,
+            dateEnd: req.body.dateEnd
+        }))
+    })
 
     //return data
     res.status(201).json(transaction);

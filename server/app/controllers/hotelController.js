@@ -74,10 +74,10 @@ const searchHotel = async (req, res) => {
     const city = req.body.city;
     const timeRange = req.body.timeRange;
     const people = req.body.people;
-    console.log(req.body);
     const page = +req.query.page;
     const limit = +req.query.limit;
 
+    //TẠO MẢNG HOTEL THỎA ĐIỀU KIỆN CITY
     const listHotelFilterCity = await Hotel.find({
         city: {
             $regex: city.trim(),
@@ -85,6 +85,7 @@ const searchHotel = async (req, res) => {
         },
     }, {}, {}).populate('rooms')
 
+    //TRONG MẢNG HOTEL ĐÓ LỌC RA CÁC HOTEL CÓ ROOM THỎA ĐIỀU KIỆN MAXPEOPLE
     const listHotelFilterCityRoom = listHotelFilterCity.filter(hotel => {
         let isReturn = false
         let newHotel = hotel
@@ -106,10 +107,10 @@ const searchHotel = async (req, res) => {
         }
     })
 
+    //TÌM TRONG TRANSACTION CÁC HOTEL CÓ ID TRÙNG VỚI HOTELCITYROOM, CHO RA MỘT MẢNG
     const listHotelId = listHotelFilterCityRoom.map(hotel => {
         return hotel._id
     })
-
 
     const transactionList = await Transaction.find({
         hotel: {
@@ -117,7 +118,7 @@ const searchHotel = async (req, res) => {
         }
     })
 
-
+    //LỌC TRONG MẢNG HOTEL TRANSACTION ĐÓ RA NHỮNG HOTEL CÓ DATESTART VÀ DATEEND TRÙNG VỚI DATESTART VÀ DATEEND CỦA CLIENT
     const transactionBooked = transactionList.filter(transaction => {
         // cua transaction
         const dateHadBooked = [new Date(transaction.dateStart).getTime(), new Date(transaction.dateEnd).getTime()]
@@ -126,14 +127,45 @@ const searchHotel = async (req, res) => {
         const dateRequest = [new Date(timeRange.startDate).getTime(), new Date(timeRange.endDate).getTime()]
 
         // startDateRequest <= startDateTransaction && endDateRequest <= endDateTransaction
-        if (dateRequest[0] <= dateHadBooked[0] && dateHadBooked[0] <= dateRequest[1]) {
+        if (dateRequest[0] <= dateHadBooked[0] && dateHadBooked[1] <= dateRequest[1]) {
             return true
         }
         return false
     })
 
-    console.log(transactionBooked);
-    res.status(200)
+    const listHotelResult = listHotelFilterCityRoom.map(hotel => {
+        transactionList.forEach(transaction => {
+
+            if (hotel._id === transaction.hotel) {
+                hotel.rooms = hotel.rooms.filter(room => {
+                    let isReturn = true;
+                    room.roomsNumber.forEach(roomNumber => {
+
+                        if (transaction.roomsNumber.includes(roomNumber)) {
+                            isReturn = false
+                        }
+                    })
+                    return isReturn
+                })
+            }
+        })
+
+        if (!hotel.rooms.length) {
+            return undefined
+        }
+
+        return hotel
+    })
+
+    const skip = ((page - 1) * limit) === 0 ? 0 : ((page - 1) * limit) - 1
+
+    res.status(200).json({
+        data: listHotelResult.slice(skip, skip + limit),
+        page,
+        limit,
+        totalPage: Math.ceil(listHotelResult.length / limit),
+        totalHotel: listHotelResult.length
+    })
 
 }
 
@@ -146,5 +178,4 @@ const hotelDetail = (req, res) => {
         .catch(err => console.log(err))
 }
 
-// module.exports = { createHotel, listHotel, deleteHotel, homepage, searchHotel, hotelDetail }
 export { createHotel, listHotel, deleteHotel, homepage, searchHotel, hotelDetail }
