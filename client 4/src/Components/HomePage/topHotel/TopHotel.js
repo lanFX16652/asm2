@@ -5,8 +5,7 @@ import { Link } from "react-router-dom";
 //Render Hotel on HomePage page
 //Parent Component
 function TopHotel(props) {
-  const topHotels = props.hotels.sort((a, b) => b.rating - a.rating).slice(0, 3);
-
+  const topHotels = props.hotels.sort((a, b) => b.rating - a.rating)
   return (
     <div>
       <h2 className="hotel-title">Homes guests love</h2>

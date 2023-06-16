@@ -19,17 +19,12 @@ const roomSchema = new Schema({
         type: Number,
         required: true,
     },
-    roomsNumber: {
-        type: [Number],
-        required: true,
-    },
-    roomsBooked: {
-        type: [{
-            roomNumberBooked: Number,
-            dateStart: Date,
-            dateEnd: Date
-        }],
-    },
+    roomsNumber: [
+        {
+            number: { type: Number },
+            unavailableDate: { type: [Date] }
+        }
+    ]
 });
 
 module.exports = mongoose.model("room", roomSchema);

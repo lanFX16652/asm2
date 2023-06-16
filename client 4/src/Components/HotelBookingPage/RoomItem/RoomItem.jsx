@@ -14,9 +14,15 @@ const RoomItem = ({
   const totalPriceHanlder = (roomBookedDataUpdate) => {
     const totalPrice = roomBookedDataUpdate.reduce((prevPrice, currentRoom) => {
       const msPerDay = 1000 * 60 * 60 * 24;
-      const dateBooked = Math.floor(
-        (calendar[0].endDate - calendar[0].startDate) / msPerDay
-      );
+      const dateBooked =
+        !calendar[0].startDate && !calendar[0].endDate
+          ? 1
+          : Math.floor(
+              (calendar[0].endDate - calendar[0].startDate) / msPerDay
+            );
+
+      console.log(dateBooked, calendar);
+
       const totalPriceCurrentRoom =
         currentRoom.roomsNumber.length *
         currentRoom.roomData.price *
@@ -124,15 +130,18 @@ const RoomItem = ({
           <h4>{roomData?.price}$</h4>
         </div>
         <div className={classes["right-content"]}>
-          {roomData?.roomNumbers?.map((roomNumber) => {
+          {roomData?.roomsNumber?.map((roomNumber) => {
             return (
-              <div key={roomNumber} className={classes["room-check-wrapper"]}>
-                <p>{roomNumber}</p>
+              <div
+                key={roomNumber._id}
+                className={classes["room-check-wrapper"]}
+              >
+                <p>{roomNumber.number}</p>
                 <input
                   className={classes["rooms-input"]}
                   type="checkbox"
                   onChange={(e) => {
-                    onChooseRoom(e, roomNumber);
+                    onChooseRoom(e, roomNumber.number);
                   }}
                 ></input>
               </div>

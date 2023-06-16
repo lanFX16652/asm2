@@ -4,13 +4,16 @@ import Room from '../models/roomModel'
 const createTransaction = async (req, res) => {
     console.log(req.body);
     //create transaction
+
+    const dateStart = req.body.dateStart
+    const dateEnd = req.body.dateEnd
     const newTransaction = await new Transaction({
         user: req.body.user,
         hotel: req.body.hotel,
         rooms: req.body.rooms,
         roomsNumber: req.body.roomsNumber,
-        dateStart: req.body.dateStart,
-        dateEnd: req.body.dateEnd,
+        dateStart,
+        dateEnd,
         price: req.body.price,
         payment: req.body.payment,
         status: req.body.status,
@@ -18,25 +21,31 @@ const createTransaction = async (req, res) => {
 
     //save to database
     const transaction = await newTransaction.save();
-    req.body.rooms.map(roomId => {
-        const room = Room.findById(roomId)
 
-        [
+
+
+    const startDate = new Date(dateStart);
+    const endDate = new Date(dateEnd);
+    const datesUnavailabled = []
+    for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+        datesUnavailabled.push(new Date(date));
+    }
+
+    console.log(datesUnavailabled, startDate, endDate);
+
+    const updateRoomPromise = req.body.rooms.map(roomId => {
+        return Room.findOneAndUpdate({ _id: roomId },
             {
-                roomNumberBooked: '101'
-                
+                $addToSet: {
+                    "roomsNumber.$[unavailableDate]": {
+                        $each: datesUnavailabled
+                    }
+                }
             },
-            {
-                roomNumberBooked: '201'
-            }
-        ]
-        const roomsNumberBooked = req.body.roomsNumber.map(roomNumber => ({
-            roomNumberBooked: roomNumber,
-            dateStart: req.body.dateStart,
-            dateEnd: req.body.dateEnd
-        }))
+        )
     })
 
+    const value = await Promise.all(updateRoomPromise)
     //return data
     res.status(201).json(transaction);
 

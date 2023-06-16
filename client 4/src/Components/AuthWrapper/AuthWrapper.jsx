@@ -11,7 +11,6 @@ const AuthWrapper = ({ children }) => {
 
   useEffect(() => {
     if (user) {
-      navigate("/");
       dispatch(loginSuccess(user.user));
     } else {
       navigate("/login");

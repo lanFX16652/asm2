@@ -91,9 +91,14 @@
   width: 40%;
   font-size: 12px;
 }
+/* .hotel-content a {
+  text-decoration: none;
+  cursor: pointer;
+} */
 .hotel-name {
   color: rgb(68, 159, 238);
   margin-bottom: 10px;
+  text-decoration: none;
 }
 .hotel-tag {
   background-color: rgb(3, 95, 3);

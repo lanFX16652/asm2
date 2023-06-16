@@ -21,11 +21,12 @@ const HotelBooking = () => {
   const [payment, setPayment] = useState("");
   const [calendar, setCalendar] = useState([
     {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 1),
+      startDate: undefined,
+      endDate: undefined,
       key: "selection",
     },
   ]);
+  const [isFormValid, setIsFormValid] = useState(true)
 
   const { name, description, rooms, price, hotelDetail } = useFetchHotelDetail(
     params.id
@@ -51,16 +52,23 @@ const HotelBooking = () => {
       status: "Booked",
     };
 
-    axios({
-      method: "POST",
-      url: "http://localhost:5000/client/transaction/create",
-      data: payload,
-    }).then((result) => {
-      console.log(result);
-      dispatch(createTransaction(result.data));
-    });
+    if (calendar[0].startDate && calendar[0].endDate && roomBookedData && payment) {
+      axios({
+        method: "POST",
+        url: "http://localhost:5000/client/transaction/create",
+        data: payload,
+      }).then((result) => {
+        console.log(result);
+        dispatch(createTransaction(result.data));
+      });
 
-    navigate("/transactions");
+      navigate("/transactions");
+
+    } else {
+      setIsFormValid(false);
+    }
+
+   
   };
 
   return (
@@ -151,6 +159,7 @@ const HotelBooking = () => {
           >
             Reserve Now
           </button>
+          {!isFormValid && <p>Bạn cần nhập đủ thông tin</p>}
         </div>
       </div>
     </div>

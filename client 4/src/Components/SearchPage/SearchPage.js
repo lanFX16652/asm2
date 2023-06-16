@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { DateRange } from "react-date-range";
 import { addDays, subDays } from "date-fns";
 import { updateDataSearch } from '../../redux/searchSlice';
+import { Link } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -13,7 +14,7 @@ function SearchPage() {
     const user = JSON.parse(localStorage.getItem("userData"));
     // state list paginate
     const [page, setPage] = useState(1);
-    const [hotelsListSearch, setHotelsListSearch] = useState([]);
+    const [hotelsListSearch, setHotelsListSearch] = useState();
 
     // state form 
     const [city, setCity] = useState(search.city);
@@ -94,7 +95,7 @@ function SearchPage() {
 
     useEffect(() => {
         fetchHotelSearch();
-    }, [])
+    }, [page])
 
 
     useEffect(() => {
@@ -125,7 +126,7 @@ function SearchPage() {
                 <div className={classes["date-wrap"]} onClick={handleClickOpen}>
                     <p>Check-in Date</p>
                     <input
-                        value={`${timechoose.startDate.toLocaleDateString('en-US')} to ${timechoose.endDate.toLocaleDateString('en-US')}`}
+                        value={`${timechoose.startDate?.toLocaleDateString('en-US')} to ${timechoose.endDate?.toLocaleDateString('en-US')}`}
                         className={classes["popup-input"]}
                     ></input>
                     <div className="calendar-box">
@@ -186,7 +187,7 @@ function SearchPage() {
             <div className={classes['hotel-list-wrapper']}>
                 {/* Searched-result rendering */}
                 <div className={classes["search-container"]}>
-                    {hotelsListSearch?.result?.map((hotel) => {
+                    {hotelsListSearch?.data?.map((hotel) => {
                         return (
                             <div className={classes['searchHotel-item']}>
                                 <div className={classes["search-image-container"]}>
@@ -194,7 +195,9 @@ function SearchPage() {
                                 </div>
 
                                 <div className={classes["hotel-content"]}>
-                                    <h2 className={classes["hotel-name"]}>{hotel.name}</h2>
+                                    <Link to={`/hotel-detail/${hotel?._id}`} className={classes["hotel-name"]}>
+                                        <h2 >{hotel.name}</h2>
+                                    </Link>
                                     <p>{hotel.distance}</p>
                                     <p className={classes["hotel-tag"]}>aaa</p>
                                     <p className={classes["hotel-description"]}>{hotel.description}</p>

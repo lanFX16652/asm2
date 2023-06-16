@@ -38,3 +38,14 @@ Content-Type: application/json
     "people": 6,
     "timeRange": "{{$timestamp}}"
 }
+
+#######
+
+POST http://localhost:5000/admin/room/create
+Content-Type: application/json
+
+{
+    "city": "ho chi minh",
+    "people": 6,
+    "timeRange": "{{$timestamp}}"
+}

@@ -5,18 +5,21 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const NewRoom = () => {
-  const adminToken = useSelector((state) => state.auth.currentUser?.accessToken);
+  const adminToken = useSelector(
+    (state) => state.auth.currentUser?.accessToken
+  );
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
   const [maxPeople, setMaxPeople] = useState(0);
-  const [roomNumbers, setRoomNumbers] = useState(0);
+  const [roomNumbers, setRoomNumbers] = useState("");
 
   const navigate = useNavigate();
 
   const submitRoomHandler = (e) => {
     e.preventDefault();
+
     axios({
       method: "POST",
       url: "http://localhost:5000/admin/room/create",
@@ -25,11 +28,11 @@ const NewRoom = () => {
         description,
         price: +price,
         maxPeople: +maxPeople,
-        roomsNumber: +roomNumbers,
+        roomsNumber: roomNumbers.split(",").map((number) => +number),
       },
       headers: {
-        Authorization: `Bearer ${adminToken}`
-      }
+        Authorization: `Bearer ${adminToken}`,
+      },
     }).then((result) => {
       if (result.status === 201) {
         navigate("/room/list");

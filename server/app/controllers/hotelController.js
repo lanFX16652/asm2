@@ -118,7 +118,7 @@ const searchHotel = async (req, res) => {
         }
     })
 
-    //LỌC TRONG MẢNG HOTEL TRANSACTION ĐÓ RA NHỮNG HOTEL CÓ DATESTART VÀ DATEEND TRÙNG VỚI DATESTART VÀ DATEEND CỦA CLIENT
+    //LỌC TRONG MẢNG HOTEL TRANSACTION ĐÓ RA NHỮNG HOTEL CÓ DATESTART VÀ DATEEND TRÙNG VỚI DATESTART VÀ DATEEND CỦA CLIENT, CHO RA MỘT MẢNG
     const transactionBooked = transactionList.filter(transaction => {
         // cua transaction
         const dateHadBooked = [new Date(transaction.dateStart).getTime(), new Date(transaction.dateEnd).getTime()]
@@ -126,16 +126,17 @@ const searchHotel = async (req, res) => {
         // client gui len 
         const dateRequest = [new Date(timeRange.startDate).getTime(), new Date(timeRange.endDate).getTime()]
 
-        // startDateRequest <= startDateTransaction && endDateRequest <= endDateTransaction
+        // startDateRequest <= startDateTransaction && endDatetTransaction <= endDateRequest
         if (dateRequest[0] <= dateHadBooked[0] && dateHadBooked[1] <= dateRequest[1]) {
             return true
         }
         return false
     })
 
+    //XÉT HOTELID TRONG CITYROOM, CÁI NÀO TRÙNG VỚI HOTELID CÓ TRONG TRANSACTION THÌ XÉT SÂU ĐẾN HOTEL.ROOMS(LOẠI PHÒNG)
+    //ĐỐI VỚI MỖI LOẠI PHÒNG XÉT SÂU ĐẾN ROOMSNUMBER: LẶP QUA MẢNG ROOMSNUMBER, ROOMNUMBER NÀO ĐÃ INCLUDES TRONG TRANSACTION.ROOMSNUMBER THÌ LOẠI RA 
     const listHotelResult = listHotelFilterCityRoom.map(hotel => {
-        transactionList.forEach(transaction => {
-
+        transactionBooked.forEach(transaction => {
             if (hotel._id === transaction.hotel) {
                 hotel.rooms = hotel.rooms.filter(room => {
                     let isReturn = true;
@@ -149,14 +150,13 @@ const searchHotel = async (req, res) => {
                 })
             }
         })
-
         if (!hotel.rooms.length) {
             return undefined
         }
-
         return hotel
     })
 
+    //PHÂN TRANG ĐỂ TRẢ DỮ LIỆU VỀ
     const skip = ((page - 1) * limit) === 0 ? 0 : ((page - 1) * limit) - 1
 
     res.status(200).json({
@@ -169,8 +169,8 @@ const searchHotel = async (req, res) => {
 
 }
 
-const hotelDetail = (req, res) => {
 
+const hotelDetail = (req, res) => {
     Hotel.findById(req.params.id)
         .then((result) => {
             res.status(200).json(result)

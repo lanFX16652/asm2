@@ -3,15 +3,20 @@ import Room from "../models/roomModel";
 
 // CONTROLLERS FOR ADMIN PAGE
 const createRoom = async (req, res) => {
-    // console.log(req.body);
-
     //Create new room
+    const roomsNumber = req.body.roomsNumber.map(roomNumber => {
+        return {
+            number: roomNumber,
+            unavailableDate: []
+        }
+    })
+
     const newRoom = await new Room({
         title: req.body.title,
         description: req.body.description,
         price: req.body.price,
         maxPeople: req.body.maxPeople,
-        roomNumbers: req.body.roomNumbers,
+        roomsNumber
     })
 
     //Save to DB
