@@ -1,5 +1,6 @@
 import Transaction from '../models/transactionModel.js';
 import Room from '../models/roomModel.js';
+import { parseDateToArray } from '../helper/parseDateToArray.js';
 
 const createTransaction = async (req, res) => {
   //create transaction
@@ -21,16 +22,7 @@ const createTransaction = async (req, res) => {
   //save to database
   const transaction = await newTransaction.save();
 
-  const startDate = new Date(dateStart);
-  const endDate = new Date(dateEnd);
-  const datesUnavailable = [];
-  for (
-    let date = startDate;
-    date <= endDate;
-    date.setDate(date.getDate() + 1)
-  ) {
-    datesUnavailable.push(new Date(date));
-  }
+  const datesUnavailable = parseDateToArray(dateStart, dateEnd);
 
   const updateRoomPromise = req.body.rooms.map((roomId) => {
     return Room.findOneAndUpdate(
@@ -46,9 +38,6 @@ const createTransaction = async (req, res) => {
             $each: datesUnavailable,
           },
         },
-      },
-      {
-        new: true,
       },
     );
   });
