@@ -1,5 +1,5 @@
-import Transaction from "../models/transactionModel.js";
-import Room from "../models/roomModel.js";
+import Transaction from '../models/transactionModel.js';
+import Room from '../models/roomModel.js';
 
 const createTransaction = async (req, res) => {
   //create transaction
@@ -23,29 +23,38 @@ const createTransaction = async (req, res) => {
 
   const startDate = new Date(dateStart);
   const endDate = new Date(dateEnd);
-  const datesUnavailabled = [];
+  const datesUnavailable = [];
   for (
     let date = startDate;
     date <= endDate;
     date.setDate(date.getDate() + 1)
   ) {
-    datesUnavailabled.push(new Date(date));
+    datesUnavailable.push(new Date(date));
   }
 
   const updateRoomPromise = req.body.rooms.map((roomId) => {
     return Room.findOneAndUpdate(
-      { _id: roomId },
+      {
+        _id: roomId,
+        'roomsNumber.number': {
+          $in: req.body.roomsNumber,
+        },
+      },
       {
         $addToSet: {
-          "roomsNumber.$[unavailableDate]": {
-            $each: datesUnavailabled,
+          'roomsNumber.$.unavailableDate': {
+            $each: datesUnavailable,
           },
         },
-      }
+      },
+      {
+        new: true,
+      },
     );
   });
 
-  const value = await Promise.all(updateRoomPromise);
+  await Promise.all(updateRoomPromise).catch((error) => console.log(error));
+
   //return data
   res.status(201).json(transaction);
 };
@@ -60,14 +69,14 @@ const listTransaction = async (req, res) => {
     {
       limit,
       skip: (page - 1) * limit,
-    }
+    },
   ).populate([
     {
-      path: "user",
-      select: "username",
+      path: 'user',
+      select: 'username',
     },
     {
-      path: "hotel",
+      path: 'hotel',
     },
   ]);
 
@@ -87,11 +96,11 @@ const userTransaction = async (req, res) => {
   const userId = req.params.userId;
   const userTransactions = await Transaction.find({ user: userId }).populate([
     {
-      path: "user",
-      select: ["username"],
+      path: 'user',
+      select: ['username'],
     },
     {
-      path: "hotel",
+      path: 'hotel',
     },
   ]);
   res.status(200).json(userTransactions);

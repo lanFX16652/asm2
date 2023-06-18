@@ -49,3 +49,26 @@ Content-Type: application/json
     "people": 6,
     "timeRange": "{{$timestamp}}"
 }
+
+#######
+
+POST http://localhost:5000/client/transaction/create
+Content-Type: application/json
+
+{
+  "user": "648f22da8b1b7f20020fb169",
+  "hotel": "648f23d48b1b7f20020fb191",
+  "rooms": [
+    "648f23b38b1b7f20020fb17f",
+    "648f23a08b1b7f20020fb177"
+  ],
+  "roomsNumber": [
+    103,
+    101
+  ],
+  "dateStart": "2023-06-17T17:00:00.000Z",
+  "dateEnd": "2023-06-18T17:00:00.000Z",
+  "price": 200,
+  "payment": "Credit Card",
+  "status": "Booked"
+}
