@@ -1,6 +1,7 @@
 import classes from "./HotelDetail.module.css";
 import useFetchHotelDetail from "../../hooks/useFetchHotelDetail";
 import { useParams, Link } from "react-router-dom";
+import { CallTracker } from "assert";
 
 const HotelDetail = () => {
   const params = useParams();
@@ -19,7 +20,7 @@ const HotelDetail = () => {
     rooms,
   } = useFetchHotelDetail(params.id);
 
-  console.log(name);
+  console.log(photos);
 
   return (
     <div className={classes.container}>
@@ -40,6 +41,14 @@ const HotelDetail = () => {
       </div>
 
       <div>
+        <div className={classes['image-wrapper']}>
+          {photos?.map(photo => (
+          <div className={classes['image-item']}> 
+            <img src={photo} /> 
+          </div>
+      ))}
+        </div>
+{/*     
         <div className={classes.imageWrap1}>
           <img src="/images/hotel_detail_1.jpg" />
           <img src="/images/hotel_detail_2.jpg" />
@@ -49,7 +58,7 @@ const HotelDetail = () => {
           <img src="/images/hotel_detail_4.jpg" />
           <img src="/images/hotel_detail_5.jpg" />
           <img src="/images/hotel_detail_6.jpg" />
-        </div>
+        </div> */}
 
         <div className={classes.content_container}>
           <div className={classes.content_wrap}>

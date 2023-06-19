@@ -28,21 +28,27 @@ const Login = () => {
   return (
     <section className="login-container">
       <div className="login-title"> Log in</div>
-      <form onSubmit={handleLogin}>
-        <label>EMAIL</label>
-        <input
-          type="text"
-          placeholder="Enter your email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <label>PASSWORD</label>
-        <input
-          type="password"
-          placeholder="Enter your password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type="submit"> Continue </button>
-      </form>
+      <div className="login-form-wrapper">
+        <form onSubmit={handleLogin}>
+          <div className="email-wrapper">
+            <label>EMAIL</label>
+            <input
+              type="text"
+              placeholder="Enter your email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="password-wrapper">
+            <label>PASSWORD</label>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button className="login-Btn" type="submit"> Continue </button>
+        </form>
+      </div>
       <div className="login-register"> Don't have an account yet? </div>
       <Link className="login-register-link" to="/register">
         Register one for free{" "}

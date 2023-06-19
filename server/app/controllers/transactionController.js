@@ -7,7 +7,8 @@ const createTransaction = async (req, res) => {
 
   const dateStart = req.body.dateStart;
   const dateEnd = req.body.dateEnd;
-  const newTransaction = await new Transaction({
+
+  const newTransaction = new Transaction({
     user: req.body.user,
     hotel: req.body.hotel,
     rooms: req.body.rooms,
@@ -26,15 +27,18 @@ const createTransaction = async (req, res) => {
 
   const updateRoomPromise = req.body.rooms.map((roomId) => {
     return Room.findOneAndUpdate(
+      // object filter tim ra room
       {
         _id: roomId,
         'roomsNumber.number': {
           $in: req.body.roomsNumber,
         },
       },
+      // option de update room
       {
         $addToSet: {
-          'roomsNumber.$.unavailableDate': {
+          'roomsNumber.$.unavailableDate':
+          {
             $each: datesUnavailable,
           },
         },

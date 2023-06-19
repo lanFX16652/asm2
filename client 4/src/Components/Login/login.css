@@ -9,7 +9,7 @@
   min-width: 20%;
   background-color: rgb(218, 218, 218);
 
-  form {
+  /* form {
     display: flex;
     margin-top: 1rem;
     font-size: 0.85rem;
@@ -37,9 +37,30 @@
     border-radius: 4px;
     color: white;
     background-color: #0071c2;
-  }
+  } */
 }
+.email-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
 
+}
+.password-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0px;
+}
+.login-Btn {
+  cursor: pointer;
+  border: none;
+  align-self: center;
+  margin-top: 1rem;
+  font-size: 1rem;
+  padding: 0.65rem;
+  border-radius: 4px;
+  color: white;
+  background-color: #0071c2;
+}
 .login-title {
   font-weight: 700;
   font-size: 1.5rem;

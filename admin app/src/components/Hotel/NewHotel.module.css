@@ -47,3 +47,7 @@
 .col-md-5 input.room-input {
     width: auto;
 }
+.image-url {
+    width: 90%;
+    resize: none;
+}

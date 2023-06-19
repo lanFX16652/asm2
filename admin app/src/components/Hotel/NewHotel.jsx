@@ -2,9 +2,13 @@ import classes from "./NewHotel.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const NewHotel = () => {
-  const adminToken = useSelector((state) => state.auth.currentUser?.accessToken);
+  const adminToken = useSelector(
+    (state) => state.auth.currentUser?.accessToken
+  );
+  const navigate = useNavigate()
 
   const [name, setName] = useState("");
   const [type, setType] = useState("");
@@ -15,6 +19,7 @@ const NewHotel = () => {
   const [price, setPrice] = useState("");
   const [featured, setFeatured] = useState("");
   const [rooms, setRoom] = useState([]);
+  const [photos, setPhotos] = useState([]);
 
   const [listRoom, setListRoom] = useState([]);
   console.log(featured);
@@ -36,11 +41,13 @@ const NewHotel = () => {
         price,
         featured,
         rooms,
+        photos: photos.split(",").map((photo) => photo),
       },
       headers: {
-        Authorization: `Bearer ${adminToken}`
-      }
+        Authorization: `Bearer ${adminToken}`,
+      },
     });
+    navigate("/hotel/list");
   };
 
   useEffect(() => {
@@ -53,8 +60,8 @@ const NewHotel = () => {
           limit: 10,
         },
         headers: {
-          Authorization: `Bearer ${adminToken}`
-        }
+          Authorization: `Bearer ${adminToken}`,
+        },
       }).then((result) => {
         setListRoom(result.data.data);
       });
@@ -136,21 +143,32 @@ const NewHotel = () => {
               </div>
 
               <div className={classes["col-md-5"]}>
-                <label>Images</label>
-                <input placeholder="New York"></input>
+                <label>Featured</label>
+                <br></br>
+                <select
+                  onChange={(e) => {
+                    console.log(e.target.value);
+                    setFeatured(e.target.value);
+                  }}
+                >
+                  <option value="yes">Yes</option>
+                  <option value="no">No</option>
+                </select>
               </div>
             </div>
 
             <div className={classes["row"]}>
-              <div className={`${classes["col-md-5"]} ${classes["scroll-div"]}`}>
+              <div
+                className={`${classes["col-md-5"]} ${classes["scroll-div"]}`}
+              >
                 <label>Rooms</label>
                 <br></br>
                 {listRoom?.map((room) => {
                   return (
-                    <div className={classes['room-wrapper']}>
+                    <div className={classes["room-wrapper"]}>
                       <label>{room.title}</label>
                       <input
-                        className={classes['room-input']}
+                        className={classes["room-input"]}
                         type="checkbox"
                         onChange={(e) => {
                           if (e.target.checked) {
@@ -164,24 +182,23 @@ const NewHotel = () => {
                           }
                         }}
                       />
-                    
                     </div>
                   );
                 })}
               </div>
 
-              <div className={classes["col-md-5"]}>
-                <label>Featured</label>
+              <div
+                className={`${classes["col-md-5"]} ${classes["scroll-div"]}`}
+              >
+                <label>Images</label>
                 <br></br>
-                <select
-                  onChange={(e) => {
-                    console.log(e.target.value);
-                    setFeatured(e.target.value);
-                  }}
-                >
-                  <option value="yes">Yes</option>
-                  <option value="no">No</option>
-                </select>
+                <textarea
+                  rows={10}
+                
+                  className={classes["image-url"]}
+                  placeholder="give comma between image links."
+                  onChange={(e) => setPhotos(e.target.value)}
+                ></textarea>
               </div>
             </div>
 

@@ -93,15 +93,20 @@ const searchHotel = async (req, res) => {
     {},
   ).populate('rooms');
 
+    // filter qua tung khach san trong danh sach khac san thoa dieu kien city
   const listHotel = listHotelFilterCity.filter((hotel) => {
     let isMatchPeople = false;
     let isMatchTimeRange = true;
 
+    // lap qua tung loai phong trong khac san thoa dieu kien city
     hotel.rooms.forEach((room) => {
+
+      // xac dinh neu co mot loai phong du dieu khien so nguoi thi pass dieu kien maxPeople
       if (room.maxPeople >= people) {
         isMatchPeople = true;
       }
 
+      // dung phuong thuc every de xac dinh toan bo loai phong  bi het phong 
       const isOutOfRoom = room.roomsNumber.every((roomNumber) => {
         return roomNumber.unavailableDate.some((date) =>
           timeRangeRequest.includes(date),
