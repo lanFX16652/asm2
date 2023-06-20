@@ -7,7 +7,7 @@
 }
 
 .hotel-wrap img {
-  width: 220px;
+  width: 320px;
   height: 220px;
 }
 .hotel-wrap {
@@ -25,4 +25,7 @@
   color: white;
   font-weight: bold;
   margin-right: 10px;
+}
+.topHotel-info-wrapper {
+  text-align: left;
 }

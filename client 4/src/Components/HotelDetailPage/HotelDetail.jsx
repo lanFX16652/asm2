@@ -33,32 +33,26 @@ const HotelDetail = () => {
 
       <div>
         <div className={classes.address_wrap}>
-          <i className="fa fa-taxi"></i>
+          <i className="bi bi-geo-alt-fill"></i>
           <p className={classes.address}>{address}</p>
         </div>
-        <p className={classes.distance}>{distance}</p>
-        <p className={classes.detail_price}>a</p>
+        <div className={classes.info_wrap}>
+          <p className={classes.distance}>Excellent location - {distance}</p>
+          <p className={classes.detail_price}>
+            Book a stay over {price}$ at this property and get a free airport
+            taxi
+          </p>
+        </div>
       </div>
 
-      <div>
-        <div className={classes['image-wrapper']}>
-          {photos?.map(photo => (
-          <div className={classes['image-item']}> 
-            <img src={photo} /> 
-          </div>
-      ))}
+      <div className={classes["image-container"]}>
+        <div className={classes["image-wrapper"]}>
+          {photos?.map((photo) => (
+            <div className={classes["image-item"]}>
+              <img src={photo} />
+            </div>
+          ))}
         </div>
-{/*     
-        <div className={classes.imageWrap1}>
-          <img src="/images/hotel_detail_1.jpg" />
-          <img src="/images/hotel_detail_2.jpg" />
-          <img src="/images/hotel_detail_3.jpg" />
-        </div>
-        <div className={classes.imageWrap2}>
-          <img src="/images/hotel_detail_4.jpg" />
-          <img src="/images/hotel_detail_5.jpg" />
-          <img src="/images/hotel_detail_6.jpg" />
-        </div> */}
 
         <div className={classes.content_container}>
           <div className={classes.content_wrap}>
@@ -67,14 +61,13 @@ const HotelDetail = () => {
           </div>
 
           <div className={classes.aside}>
-            <h4 className={classes.aside_title}>Perfect for a 9-night stay!</h4>
-            <p className={classes.aside_content}>
-              Located in the real heart of Krakow, this property has an
-              excellent location score of 9.8!
-            </p>
+            <h4 className={classes.aside_title}>Perfect for a 1-night stay!</h4>
+
             <div className={classes.aside_price}>
               <h2>${price}</h2>
-              <h2 className={classes.aside_night}>{"(9-night)"}</h2>
+              <span className={classes.aside_night}>
+                <p>{"(1-night)"}</p>
+              </span>
             </div>
             <Link to={`/booking/${params.id}`}>
               <button className={classes.bookBtn}>Reserve or Book Now!</button>

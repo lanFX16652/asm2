@@ -11,6 +11,7 @@ const searchSlice = createSlice({
     },
     reducers: {
         updateDataSearch: (state, action) => {
+            console.log(action.payload);
             state.search = { ...action.payload }
         }
 

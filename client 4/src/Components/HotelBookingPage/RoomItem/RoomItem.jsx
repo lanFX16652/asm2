@@ -9,6 +9,7 @@ const RoomItem = ({
   calendar,
   setTotalPrice,
 }) => {
+  console.log("calendar", calendar)
   const [roomData, setRoomData] = useState();
 
   const totalPriceHanlder = (roomBookedDataUpdate) => {
@@ -125,7 +126,7 @@ const RoomItem = ({
       <h4>{roomData?.title}</h4>
       <div className={classes["budgetroom-info-wrapper"]}>
         <div className={classes["left-content"]}>
-          <h4>Pay nothing until September 04, 2022</h4>
+          {calendar.startDate && <h4>Pay nothing until September 04, 2022</h4>}
           <p>Max people: {roomData?.maxPeople}</p>
           <h4>{roomData?.price}$</h4>
         </div>

@@ -26,7 +26,7 @@ const HotelBooking = () => {
       key: "selection",
     },
   ]);
-  const [isFormValid, setIsFormValid] = useState(true)
+  const [isFormValid, setIsFormValid] = useState(true);
 
   const { name, description, rooms, price, hotelDetail } = useFetchHotelDetail(
     params.id
@@ -52,7 +52,12 @@ const HotelBooking = () => {
       status: "Booked",
     };
 
-    if (calendar[0].startDate && calendar[0].endDate && roomBookedData && payment) {
+    if (
+      calendar[0].startDate &&
+      calendar[0].endDate &&
+      roomBookedData &&
+      payment
+    ) {
       axios({
         method: "POST",
         url: "http://localhost:5000/client/transaction/create",
@@ -62,13 +67,10 @@ const HotelBooking = () => {
         dispatch(createTransaction(result.data));
       });
 
-      navigate("/transactions");
-
+      // navigate("/transactions");
     } else {
       setIsFormValid(false);
     }
-
-   
   };
 
   return (
@@ -82,13 +84,16 @@ const HotelBooking = () => {
           <h2>
             ${price} <span>{"(9-night)"}</span>
           </h2>
-          <button className={classes.bookBtn}>Reserve or Book Now!</button>
+          <button className={classes.bookBtn} onClick={transactionSubmit}>
+            Reserve or Book Now!
+          </button>
         </div>
       </div>
 
       <div className={classes["container-date-reservedinfo"]}>
         <div className={classes["daterange-wrapper"]}>
           <h3>Dates</h3>
+          <br></br>
           <DateRange
             editableDateInputs={true}
             moveRangeOnFirstSelection={false}
@@ -101,27 +106,29 @@ const HotelBooking = () => {
         </div>
         <div className={classes["reserveinfo-wrapper"]}>
           <h3>Reserved Info</h3>
+          <br></br>
           <div className={classes["input-wrapper"]}>
             <label>Your Full Name:</label>
-            <input placeholder="Full Name"></input>
+            <input placeholder="Full Name" value={user?.fullName} />
           </div>
           <div className={classes["input-wrapper"]}>
             <label>Your Email:</label>
-            <input placeholder="Email"></input>
+            <input placeholder="Email" value={user?.email} />
           </div>
           <div className={classes["input-wrapper"]}>
             <label>Your Phone Number:</label>
-            <input placeholder="Phone Number"></input>
+            <input placeholder="Phone Number" value={user?.phoneNumber} />
           </div>
           <div className={classes["input-wrapper"]}>
             <label>Your Identity Card Number:</label>
-            <input placeholder="Card Number"></input>
+            <input placeholder="Card Number" />
           </div>
         </div>
       </div>
 
       <div className={classes["container-selectrooms"]}>
         <h3>Select Rooms</h3>
+        <br></br>
         <div className={classes["doubleroom-twinroom-wrapper"]}>
           {rooms?.map((roomId) => {
             return (
@@ -138,9 +145,10 @@ const HotelBooking = () => {
         </div>
       </div>
 
-      <div className={classes["container-totalbill"]}>
-        <div>
-          <h3>Total Bill: {totalPrice}$</h3>
+      <div className={classes["totalbill-wrapper"]}>
+        <h3>Total Bill: {totalPrice}$</h3>
+        <div className={classes["container-totalbill"]}>
+          {/* <h3>Total Bill: {totalPrice}$</h3> */}
           <select
             onChange={(e) => {
               setPayment(e.target.value);
@@ -150,11 +158,10 @@ const HotelBooking = () => {
             <option value="Credit Card">Credit Card</option>
             <option value="Cash">Cash</option>
           </select>
-        </div>
-        <div>
+
           <button
             style={{ margin: "12px" }}
-            className={classes.bookBtn}
+            className={classes.bookReserve}
             onClick={transactionSubmit}
           >
             Reserve Now

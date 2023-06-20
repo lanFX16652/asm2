@@ -18,16 +18,14 @@ function TopHotel(props) {
           }
           return (
             <div className="hotel-wrap">
-              <img src={process.env.PUBLIC_URL + '/images/hotel_search_1.webp'} />
-              <Link to={`/hotel-detail/${topHotel?._id}`}>
-                <h4 className="hotel-content">{topHotel?.name}</h4>
-              </Link>
+              <img src={topHotel?.photos[0]} />
+              <div className="topHotel-info-wrapper">
+                <Link to={`/hotel-detail/${topHotel?._id}`}>
+                  <h4 className="hotel-content">{topHotel?.name}</h4>
+                </Link>
 
-              <h4 className="hotel-content">{topHotel?.city}</h4>
-              <h4 className="hotel-content">Starting from {topHotel?.price}$</h4>
-              <div className="hotel-rate">
-                <span className="rate">{topHotel?.rating}</span>
-                <span>{topHotel?.type}</span>
+                <p className="hotel-content">{topHotel?.city}</p>
+                <h4 className="hotel-content">Starting from {topHotel?.price}$</h4>
               </div>
             </div>
           )

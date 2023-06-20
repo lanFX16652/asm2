@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import classes from './SearchPage.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { DateRange } from "react-date-range";
-import { addDays, subDays } from "date-fns";
 import { updateDataSearch } from '../../redux/searchSlice';
 import { Link } from 'react-router-dom';
 
@@ -19,27 +18,25 @@ function SearchPage() {
     // state form 
     const [city, setCity] = useState(search.city);
     const [people, setPeople] = useState(search.people);
-    const [timechoose, setTimeChoose] = useState({ startDate: search.timeRange[0], endDate: search.timeRange[1] })
 
     // state calender
     const [popup, setPopup] = useState(false);
     const [calendar, setCalendar] = useState([
         {
-            startDate: subDays(new Date(), 7),
-            endDate: addDays(new Date(), 1),
+            startDate: new Date(search.timeRange[0]),
+            endDate: new Date(search.timeRange[1]),
             key: "selection"
         }
     ]);
     const [countSelectDate, setCountSelectDate] = useState(0)
 
-    const isSearchAble = city && people && timechoose
+    const isSearchAble = city && people && calendar[0].startDate && calendar[0].endDate
 
     const handleOnChange = (ranges) => {
         const { selection } = ranges;
         setCalendar([selection]);
         setCountSelectDate(countSelectDate + 1)
     };
-
     const fetchHotelSearch = () => {
         axios({
             method: "POST",
@@ -48,8 +45,8 @@ function SearchPage() {
                 city,
                 people,
                 timeRange: {
-                    startDate: calendar[0].startDate,
-                    endDate: calendar[0].endDate
+                    startDate: calendar[0].startDate.toDateString(),
+                    endDate: calendar[0].endDate.toDateString()
                 }
             },
             params: {
@@ -69,11 +66,10 @@ function SearchPage() {
     const searchHanlder = () => {
         dispatch(updateDataSearch({
             city,
-            timeRange: [calendar[0].startDate.toLocaleDateString('en-GB'), calendar[0].endDate.toLocaleDateString('en-GB')],
+            timeRange: [calendar[0].startDate.toDateString(), calendar[0].endDate.toDateString()],
             people,
         }))
         fetchHotelSearch()
-
     }
 
     const nextPageHandler = () => {
@@ -101,15 +97,14 @@ function SearchPage() {
     useEffect(() => {
         if (countSelectDate === 2) {
             setPopup(false)
-            const startDate = calendar[0].startDate.toLocaleDateString('en-US');
-            const endDate = calendar[0].endDate.toLocaleDateString('en-US');
-            setTimeChoose({
-                startDate,
-                endDate
-            })
             setCountSelectDate(0)
         }
     }, [countSelectDate])
+
+    const startDate = calendar[0].startDate ? calendar[0].startDate?.toLocaleDateString('en-GB') : undefined
+    const endDate = calendar[0].endDate ? calendar[0].endDate?.toLocaleDateString('en-GB') : undefined
+
+    const valueDateInput = startDate && endDate ? `${startDate} to ${endDate}` : ''
 
     return (
         <div className={classes['searchPage']}>
@@ -126,7 +121,7 @@ function SearchPage() {
                 <div className={classes["date-wrap"]} onClick={handleClickOpen}>
                     <p>Check-in Date</p>
                     <input
-                        value={`${timechoose.startDate?.toLocaleDateString('en-US')} to ${timechoose.endDate?.toLocaleDateString('en-US')}`}
+                        value={valueDateInput}
                         className={classes["popup-input"]}
                     ></input>
                     <div className="calendar-box">
@@ -175,7 +170,7 @@ function SearchPage() {
                         </div>
                         <div className={classes["option-wrap"]}>
                             <p>Max People</p>
-                            <input className={classes["option-input"]} value={search.people} onChange={(e) => setPeople(e.target.value)}></input>
+                            <input className={classes["option-input"]} type='number' value={people} onChange={(e) => setPeople(e.target.value)}></input>
                         </div>
                     </div>
 
@@ -191,15 +186,16 @@ function SearchPage() {
                         return (
                             <div className={classes['searchHotel-item']}>
                                 <div className={classes["search-image-container"]}>
-                                    <img src={process.env.PUBLIC_URL + '/images/hotel_1.webp'}></img>
+                                    <img src={hotel?.photos[0]}></img>
                                 </div>
 
                                 <div className={classes["hotel-content"]}>
                                     <Link to={`/hotel-detail/${hotel?._id}`} className={classes["hotel-name"]}>
                                         <h2 >{hotel.name}</h2>
                                     </Link>
-                                    <p>{hotel.distance}</p>
-                                    <p className={classes["hotel-tag"]}>aaa</p>
+                                    <p>Exellent location - {hotel.distance}</p>
+                                    {/* <p className={classes["hotel-tag"]}> Book a stay over {hotel?.price}$ at this property and get a free airport
+                                        taxi</p> */}
                                     <p className={classes["hotel-description"]}>{hotel.description}</p>
                                     <p>{hotel.type}</p>
                                     <p className={classes["cancel"]}>Free cancellation</p>
@@ -210,7 +206,7 @@ function SearchPage() {
 
                                 <div className={classes["rate-container"]}>
                                     <div className={classes["rate-wrap"]}>
-                                        <span className="rate-text">{hotel.rating}</span>
+                                        <span className="rate-text">Rating: </span>
                                         <span className={classes["rate-point"]}>{hotel.rating}</span>
                                     </div>
                                     <div>

@@ -71,36 +71,44 @@
   margin: 0px 0px 15px 5px;
 }
 .bookBtn {
+  width: 86%;
   padding: 10px;
+  margin-top: 80px;
+  margin-left: 20px;
   background-color: rgb(68, 159, 238);
   color: white;
   border-radius: 5px;
   border: none;
   font-weight: 600;
+  cursor: pointer;
 }
 
 /* STYLING DATE AND RESERED INFO */
 .container-date-reservedinfo {
   display: flex;
   justify-content: space-between;
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  margin: 30px 0px;
 }
-/* .daterange-wrapper {
-   
-} */
+.daterange-wrapper {
+  text-align: left;
+}
 .reserveinfo-wrapper {
   width: 60%;
+  text-align: left;
 }
 .input-wrapper input {
   width: 100%;
   border: 1px solid black;
   border-radius: 5px;
   padding: 10px;
+  margin-bottom: 15px;
 }
 
 /* STYLING SELECT ROOM */
 .container-selectrooms {
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  text-align: left;
 }
 .doubleroom-twinroom-wrapper {
   display: flex;
@@ -113,7 +121,7 @@
 .budgetdoubleroom-info-wrapper {
   display: flex;
   justify-content: space-between;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 }
 .left-content {
   text-align: left;
@@ -130,10 +138,29 @@
 .budgettwinroom-info-wrapper {
   display: flex;
   justify-content: space-between;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 }
 
 /* STYLING TOTAL BILL */
+.totalbill-wrapper {
+  text-align: left;
+  margin: 20px 0px;
+}
 .container-totalbill {
   display: flex;
+  height: 60px;
+  gap: 30px;
+}
+.bookReserve {
+  width: 30%;
+  height: 80%;
+  padding: 10px;
+  align-items: center;
+  margin-left: 20px;
+  background-color: rgb(68, 159, 238);
+  color: white;
+  border-radius: 5px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
 }

@@ -4,7 +4,6 @@ import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { addDays, subDays } from "date-fns";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { updateDataSearch } from '../../../redux/searchSlice'
@@ -16,7 +15,6 @@ function SearchBar() {
     //Define useState for DateRange
     const [city, setCity] = useState("");
     const [people, setPeople] = useState(0);
-    const [timechoose, setTimeChoose] = useState('')
 
     //Define handeleClick function to popup DateRange
     const [popup, setPopup] = useState(false);
@@ -29,15 +27,15 @@ function SearchBar() {
     // logic date picker
     const [calendar, setCalendar] = useState([
         {
-            startDate: subDays(new Date(), 7),
-            endDate: addDays(new Date(), 1),
+            startDate: undefined,
+            endDate: undefined,
             key: "selection"
         }
     ]);
 
     const [countSelectDate, setCountSelectDate] = useState(0)
 
-    const isSearchAble = city && people && timechoose
+    const isSearchAble = city && people && calendar[0].startDate && calendar[0].endDate
 
     const handleOnChange = (ranges) => {
         const { selection } = ranges;
@@ -49,7 +47,7 @@ function SearchBar() {
     const searchHanlder = () => {
         dispatch(updateDataSearch({
             city,
-            timeRange: [calendar[0].startDate, calendar[0].endDate],
+            timeRange: [calendar[0].startDate.toDateString(), calendar[0].endDate.toDateString()],
             people,
         }))
         navigate('/search')
@@ -58,13 +56,14 @@ function SearchBar() {
     useEffect(() => {
         if (countSelectDate === 2) {
             setPopup(false)
-            const startDate = calendar[0].startDate.toLocaleDateString('en-US');
-            const endDate = calendar[0].endDate.toLocaleDateString('en-US');
-            setTimeChoose(`${startDate} - ${endDate} `)
             setCountSelectDate(0)
         }
     }, [countSelectDate])
 
+    const startDate = calendar[0].startDate ? calendar[0].startDate?.toLocaleDateString('en-GB') : undefined
+    const endDate = calendar[0].endDate ? calendar[0].endDate?.toLocaleDateString('en-GB') : undefined
+
+    const valueDateInput = startDate && endDate ? `${startDate} to ${endDate}` : ''
     return (
         <div className="wrapper">
             <div className="header">
@@ -90,7 +89,7 @@ function SearchBar() {
                 <div onClick={handleClickOpen} className="calendar-box-wrapper">
                     <i className="bi bi-calendar3"></i>
                     {/* <i className="fa fa-calendar" onClick={handleClickOpen}></i> */}
-                    <input type="text" value={timechoose} className="input" placeholder="Enter Date"></input>
+                    <input type="text" value={valueDateInput} className="input" placeholder="Enter Date"></input>
                     <div className="calendar-box">
                         {popup ? (
                             <DateRange

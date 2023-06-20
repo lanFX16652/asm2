@@ -13,6 +13,9 @@
   font-size: 13px;
   margin: 10px;
 }
+.info_wrap {
+  text-align: left;
+}
 .distance {
   color: rgb(68, 159, 238);
   font-weight: 600;
@@ -30,6 +33,10 @@
   border-radius: 5px;
   border: none;
   font-weight: 600;
+  cursor: pointer;
+}
+.image-container {
+  margin: 30px 0px;
 }
 .image-wrapper {
   display: flex;
@@ -38,7 +45,7 @@
 }
 
 .image-item {
-  flex-basis: 30%;
+  flex-basis: 32%;
 }
 
 .image-item img {
@@ -46,26 +53,6 @@
   height: 200px;
 }
 
-.imageWrap1 {
-  display: flex;
-  justify-content: space-between;
-  column-gap: 14px;
-}
-.imageWrap2 {
-  display: flex;
-  justify-content: space-between;
-  column-gap: 14px;
-}
-.imageWrap1 img {
-  width: 320px;
-  height: 230px;
-  padding: 20px 0px 10px 0px;
-}
-.imageWrap2 img {
-  width: 320px;
-  height: 230px;
-  padding: 20px 0px 10px 0px;
-}
 .content_container {
   display: flex;
   justify-content: space-between;
@@ -73,6 +60,7 @@
 }
 .content_wrap {
   width: 690px;
+  text-align: left;
 }
 .content_description {
   margin-top: 20px;
@@ -97,15 +85,17 @@
   display: flex;
 }
 .aside_night {
-  font-weight: 350;
-  margin: 0px 0px 15px 5px;
+  font-size: 26px;
+  
+  margin: 0px 0px 15px 10px;
 }
 .bookBtn {
-  width: 230px;
+  width: 90%;
   padding: 10px;
   background-color: rgb(68, 159, 238);
   color: white;
   border-radius: 5px;
   border: none;
   font-weight: 600;
+  cursor: pointer;
 }

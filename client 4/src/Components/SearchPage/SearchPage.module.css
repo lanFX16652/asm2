@@ -61,8 +61,8 @@
 /* Search Items */
 .search-container {
   width: 75%;
-  border: 1px solid black;
-  border-radius: 10px;
+  /* border: 1px solid black; */
+  /* border-radius: 10px; */
   display: flex;
   flex-direction: column;
   /* justify-content: space-between; */
@@ -77,19 +77,20 @@
   display: flex;
   justify-content: space-between;
   border: 1px solid black;
-  border-radius: 3px;
+  border-radius: 10px;
 }
 .search-image-container {
-  width: 20%;
+  width: 23%;
 }
 .search-image-container img {
   width: 100%;
-  height: auto;
+  height: 80%;
   margin: 5px;
 }
 .hotel-content {
-  width: 40%;
+  width: 50%;
   font-size: 12px;
+  text-align: left;
 }
 /* .hotel-content a {
   text-decoration: none;
@@ -101,8 +102,8 @@
   text-decoration: none;
 }
 .hotel-tag {
-  background-color: rgb(3, 95, 3);
-  color: white;
+  color: rgb(3, 95, 3);
+  font-weight: bold;
   border-radius: 5px;
   padding: 5px 0px;
   margin: 7px 0px;
@@ -121,7 +122,7 @@
   color: rgb(3, 95, 3);
 }
 .rate-container {
-  width: 25%;
+  width: 16%;
   padding: 5px 5px 10px 5px;
   display: flex;
   flex-direction: column;
@@ -129,8 +130,7 @@
   text-align: right;
 }
 .rate-wrap {
-  display: flex;
-  justify-content: space-between;
+  text-align: right;
 }
 .rate-text {
   font-weight: bold;
@@ -152,7 +152,7 @@
 }
 .availabilityBtn {
   padding: 10px;
-  width: 150px;
+  width: 100%;
   background-color: rgb(68, 159, 238);
   color: white;
   border-radius: 5px;

@@ -76,9 +76,10 @@ const searchHotel = async (req, res) => {
   const page = +req.query.page;
   const limit = +req.query.limit;
 
-  const timeRangeRequest = createDateArray(
+  const timeRangeRequest = parseDateToArray(
     timeRange.startDate,
     timeRange.endDate,
+    true
   );
 
   //TẠO MẢNG HOTEL THỎA ĐIỀU KIỆN CITY
@@ -93,7 +94,7 @@ const searchHotel = async (req, res) => {
     {},
   ).populate('rooms');
 
-    // filter qua tung khach san trong danh sach khac san thoa dieu kien city
+  // filter qua tung khach san trong danh sach khac san thoa dieu kien city
   const listHotel = listHotelFilterCity.filter((hotel) => {
     let isMatchPeople = false;
     let isMatchTimeRange = true;
@@ -108,8 +109,9 @@ const searchHotel = async (req, res) => {
 
       // dung phuong thuc every de xac dinh toan bo loai phong  bi het phong 
       const isOutOfRoom = room.roomsNumber.every((roomNumber) => {
+
         return roomNumber.unavailableDate.some((date) =>
-          timeRangeRequest.includes(date),
+          timeRangeRequest.includes(date.toDateString()),
         );
       });
 
@@ -123,7 +125,14 @@ const searchHotel = async (req, res) => {
     return false;
   });
 
-  return res.status(200).json(listHotel);
+  // return res.status(200).json(listHotel);
+  return res.status(200).json({
+    data: listHotel,
+    page: page,
+    limit: limit,
+    totalHotel: listHotel.length,
+    totalPage: Math.ceil(listHotel.length / limit)
+  })
 };
 
 const hotelDetail = (req, res) => {

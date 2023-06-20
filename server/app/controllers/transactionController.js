@@ -5,8 +5,8 @@ import { parseDateToArray } from '../helper/parseDateToArray.js';
 const createTransaction = async (req, res) => {
   //create transaction
 
-  const dateStart = req.body.dateStart;
-  const dateEnd = req.body.dateEnd;
+  const dateStart = new Date(req.body.dateStart);
+  const dateEnd = new Date(req.body.dateEnd);
 
   const newTransaction = new Transaction({
     user: req.body.user,
@@ -23,7 +23,7 @@ const createTransaction = async (req, res) => {
   //save to database
   const transaction = await newTransaction.save();
 
-  const datesUnavailable = parseDateToArray(dateStart, dateEnd);
+  const datesUnavailable = parseDateToArray(dateStart, dateEnd, false);
 
   const updateRoomPromise = req.body.rooms.map((roomId) => {
     return Room.findOneAndUpdate(
@@ -37,7 +37,7 @@ const createTransaction = async (req, res) => {
       // option de update room
       {
         $addToSet: {
-          'roomsNumber.$.unavailableDate':
+          'roomsNumber.$[].unavailableDate':
           {
             $each: datesUnavailable,
           },
