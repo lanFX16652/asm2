@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
-import session from "express-session";
+// import session from "express-session";
 
 import { authenticateRouter } from "./routers/auth.js";
 import hotelWebRoute from "./routers/hotel.js";
@@ -12,8 +12,8 @@ import roomWebRoute from "./routers/room.js";
 import transactionRoute from "./routers/transaction.js";
 
 // import
-import mongodbSession from "connect-mongodb-session";
-const MongoDBStore = mongodbSession(session);
+// import mongodbSession from "connect-mongodb-session";
+// const MongoDBStore = mongodbSession(session);
 
 // required
 // const MongoDBStore = require("connect-mongodb-session");
@@ -23,10 +23,10 @@ const MONGODB_URI = "mongodb://127.0.0.1:27017/asm2";
 dotenv.config();
 const app = express();
 const port = 5000;
-const store = new MongoDBStore({
-  uri: MONGODB_URI,
-  collection: "sessions",
-});
+// const store = new MongoDBStore({
+//   uri: MONGODB_URI,
+//   collection: "sessions",
+// });
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,21 +34,23 @@ app.use(cors());
 app.use(cookieParser());
 
 //sử dụng session để kiểm tra login
-app.use(
-  session({
-    secret: "my secret",
-    resave: false,
-    saveUninitialized: true,
-    store: store,
-  })
-);
+// app.use(
+//   session({
+//     secret: "my secret",
+//     resave: false,
+//     saveUninitialized: true,
+//     store: store,
+//   })
+// );
 
-app.use(transactionRoute);
+
 
 // authenticate route
-app.use(authenticateRouter);
+
 
 //init web routes
+app.use(authenticateRouter);
+app.use(transactionRoute);
 hotelWebRoute(app);
 roomWebRoute(app);
 

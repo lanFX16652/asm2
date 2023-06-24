@@ -60,10 +60,12 @@ function SearchBar() {
         }
     }, [countSelectDate])
 
+    //logic để hiển thị value cho input timeRange
     const startDate = calendar[0].startDate ? calendar[0].startDate?.toLocaleDateString('en-GB') : undefined
     const endDate = calendar[0].endDate ? calendar[0].endDate?.toLocaleDateString('en-GB') : undefined
-
     const valueDateInput = startDate && endDate ? `${startDate} to ${endDate}` : ''
+
+
     return (
         <div className="wrapper">
             <div className="header">
@@ -77,7 +79,6 @@ function SearchBar() {
             <div className="input-container">
                 <div>
                     <i className="bi bi-taxi-front"></i>
-                    {/* <i className="fa fa-bed"></i> */}
                     <input
                         className="input"
                         type="text"
@@ -87,8 +88,7 @@ function SearchBar() {
                 </div>
 
                 <div onClick={handleClickOpen} className="calendar-box-wrapper">
-                    <i className="bi bi-calendar3"></i>
-                    {/* <i className="fa fa-calendar" onClick={handleClickOpen}></i> */}
+                    <i className="bi bi-calendar3"></i>    
                     <input type="text" value={valueDateInput} className="input" placeholder="Enter Date"></input>
                     <div className="calendar-box">
                         {popup ? (
@@ -109,7 +109,6 @@ function SearchBar() {
 
                 <div>
                     <i className="bi bi-person"></i>
-                    {/* <i className="fa fa-female"></i> */}
                     <input
                         className="input"
                         type="number"

@@ -94,34 +94,27 @@ const searchHotel = async (req, res) => {
     {},
   ).populate('rooms');
 
-  // filter qua tung khach san trong danh sach khac san thoa dieu kien city
+  // filter qua tung khach san trong danh sach khach san thoa dieu kien city
   const listHotel = listHotelFilterCity.filter((hotel) => {
     let isMatchPeople = false;
-    let isMatchTimeRange = true;
-
-    // lap qua tung loai phong trong khac san thoa dieu kien city
+    let isMatchDateBooked = false;
+    // lap qua tung loai phong trong khach san thoa dieu kien city
     hotel.rooms.forEach((room) => {
-
       // xac dinh neu co mot loai phong du dieu khien so nguoi thi pass dieu kien maxPeople
       if (room.maxPeople >= people) {
         isMatchPeople = true;
       }
-
-      // dung phuong thuc every de xac dinh toan bo loai phong  bi het phong 
+      // dung phuong thuc every de xac dinh toan bo loai phong bi het phong 
       const isOutOfRoom = room.roomsNumber.every((roomNumber) => {
-
         return roomNumber.unavailableDate.some((date) =>
-          timeRangeRequest.includes(date.toDateString()),
+          timeRangeRequest.includes(date.toDateString())
         );
       });
-
-      if (isOutOfRoom) isMatchTimeRange = false;
+      if (isOutOfRoom) isMatchDateBooked = true;
     });
-
-    if (isMatchPeople && isMatchTimeRange) {
+    if (isMatchPeople && !isMatchDateBooked) {
       return true;
     }
-
     return false;
   });
 

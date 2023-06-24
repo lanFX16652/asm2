@@ -1,7 +1,7 @@
 import classes from "./HotelDetail.module.css";
 import useFetchHotelDetail from "../../hooks/useFetchHotelDetail";
 import { useParams, Link } from "react-router-dom";
-import { CallTracker } from "assert";
+
 
 const HotelDetail = () => {
   const params = useParams();

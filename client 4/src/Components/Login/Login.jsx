@@ -11,6 +11,7 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.login.currentUser);
+  const loginErrorMessage = useSelector((state) => state.auth.login.error);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -46,9 +47,13 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button className="login-Btn" type="submit"> Continue </button>
+          <button className="login-Btn" type="submit">
+            {" "}
+            Continue{" "}
+          </button>
         </form>
       </div>
+      <p>{loginErrorMessage ? loginErrorMessage : ""}</p>
       <div className="login-register"> Don't have an account yet? </div>
       <Link className="login-register-link" to="/register">
         Register one for free{" "}

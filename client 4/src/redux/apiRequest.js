@@ -10,8 +10,9 @@ export const loginUser = async (user, dispatch, navigate) => {
         localStorage.setItem('userData', JSON.stringify(res.data))
         dispatch(loginSuccess(res.data.user));
         navigate("/");
-    } catch (err) {
-        dispatch(loginFailed());
+
+    } catch (errAxios) {
+        dispatch(loginFailed(errAxios?.response?.data?.message));
     }
 };
 

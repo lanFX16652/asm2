@@ -1,4 +1,5 @@
 import Room from "../models/roomModel.js";
+import { parseDateToArray } from '../helper/parseDateToArray.js'
 
 // CONTROLLERS FOR ADMIN PAGE
 const createRoom = async (req, res) => {
@@ -59,12 +60,27 @@ const deleteRoom = async (req, res) => {
 
 // ********************
 // CONTROLLER FOR CLIENT PAGE
-const getRoomNumberList = (req, res) => {
-  Room.findById(req.params.id)
-    .then((result) => {
-      res.status(200).json(result);
+const getRoomNumberList = async (req, res) => {
+  const { startDate, endDate } = req.query
+  console.log(startDate, endDate)
+  console.log(new Date(+startDate).toUTCString(), new Date(+endDate))
+  const dateRangeFindToBook = parseDateToArray(startDate, endDate, true)
+  // console.log(dateRangeFindToBook)
+  const room = await Room.findById(req.params.id)
+
+  room.roomsNumber = room.roomsNumber.filter(roomNumber => {
+    const isOutOfRoom = roomNumber.unavailableDate.some(date => {
+      // console.log(date.getTime(), roomNumber.number)
+      return dateRangeFindToBook.includes(date.toDateString())
     })
-    .catch((err) => console.log(err));
+    if (isOutOfRoom) {
+      return false
+    } else {
+      return true
+    }
+  })
+
+  res.status(200).json(room);
 };
 
 export { createRoom, listRoom, deleteRoom, getRoomNumberList };

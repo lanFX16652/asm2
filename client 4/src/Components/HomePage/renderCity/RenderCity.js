@@ -2,17 +2,11 @@ import RenderCityItem from "./RenderCityItem";
 import "./RenderCity.css";
 
 //Render cities on HomePage page
-//Parent Component
 function RenderCity(props) {
-  // console.log("props1", props);
+
   const propsInHochiMinh = props.hotels.filter(hotel => hotel.city === "Ho Chi Minh");
-  // console.log(propsInHochiMinh);
-
   const propsInHanoi = props.hotels.filter(hotel => hotel.city === "Ha Noi");
-  // console.log(propsInHanoi);
-
   const propsInDanang = props.hotels.filter(hotel => hotel.city === "Da Nang");
-  // console.log(propsInDanang);
 
   return (
     <div className="city-container">

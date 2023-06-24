@@ -5,18 +5,23 @@ import axios from "axios";
 export const loginAction = createAsyncThunk(
     'auth/login',
     async (data) => {
-        const response = await axios({
-            method: "POST",
-            url: "http://localhost:5000/admin/login",
-            data: data.loginData,
-        })
+        try {
+            const response = await axios({
+                method: "POST",
+                url: "http://localhost:5000/admin/login",
+                data: data.loginData,
+            })
 
-        if (response.data) {
-            data.navigate('/')
-            localStorage.setItem("admin", JSON.stringify(response.data))
+            if (response.data) {
+                data.navigate('/')
+                localStorage.setItem("admin", JSON.stringify(response.data))
+            }
+
+            return response.data
+        } catch (error) {
+            throw error.response.data.message
         }
 
-        return response.data
     }
 )
 
@@ -43,7 +48,7 @@ const authSlice = createSlice({
         })
         builder.addCase(loginAction.rejected, (state, action) => {
             state.isFetching = false;
-            state.error = true
+            state.error = action.error.message;
         })
     }
 })

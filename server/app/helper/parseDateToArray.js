@@ -11,5 +11,7 @@ export const parseDateToArray = (startDate, endDate, isToString) => {
     }
     currentDate.setDate(currentDate.getDate() + 1);
   }
+
   return dates;
 };
+

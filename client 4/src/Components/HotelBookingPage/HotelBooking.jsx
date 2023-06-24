@@ -2,7 +2,6 @@ import classes from "./HotelBooking.module.css";
 import { DateRange } from "react-date-range";
 import useFetchHotelDetail from "../../hooks/useFetchHotelDetail";
 import { useParams } from "react-router-dom";
-import useFetchListRoom from "../../hooks/useFetchListRoom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import RoomItem from "./RoomItem/RoomItem";
@@ -43,8 +42,8 @@ const HotelBooking = () => {
     const payload = {
       user: user._id,
       hotel: hotelDetail._id,
-      rooms: roomArr, // "3232321asdasdasd"
-      roomsNumber: roomNumberArr, // ["101",
+      rooms: roomArr,
+      roomsNumber: roomNumberArr,
       dateStart: calendar[0].startDate,
       dateEnd: calendar[0].endDate,
       price: totalPrice,
@@ -63,11 +62,10 @@ const HotelBooking = () => {
         url: "http://localhost:5000/client/transaction/create",
         data: payload,
       }).then((result) => {
-        console.log(result);
         dispatch(createTransaction(result.data));
       });
 
-      // navigate("/transactions");
+      navigate("/transactions");
     } else {
       setIsFormValid(false);
     }
@@ -130,18 +128,22 @@ const HotelBooking = () => {
         <h3>Select Rooms</h3>
         <br></br>
         <div className={classes["doubleroom-twinroom-wrapper"]}>
-          {rooms?.map((roomId) => {
-            return (
-              <RoomItem
-                key={roomId}
-                roomId={roomId}
-                roomBookedData={roomBookedData}
-                calendar={calendar}
-                setTotalPrice={setTotalPrice}
-                setRoomBookedData={setRoomBookedData}
-              />
-            );
-          })}
+          {calendar[0].startDate && calendar[0].endDate ? (
+            rooms?.map((roomId) => {
+              return (
+                <RoomItem
+                  key={roomId}
+                  roomId={roomId}
+                  roomBookedData={roomBookedData}
+                  calendar={calendar}
+                  setTotalPrice={setTotalPrice}
+                  setRoomBookedData={setRoomBookedData}
+                />
+              );
+            })
+          ) : (
+            <p>Please select Date</p>
+          )}
         </div>
       </div>
 

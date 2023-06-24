@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginAction } from "../../redux/authSlice";
+import { useSelector } from "react-redux";
 // import {loginUser} from "../../redux/apiRequest";
 
 const Login = () => {
@@ -10,7 +11,8 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const error = useSelector((state) => state.auth.error);
+console.log()
   const handleLogin = (e) => {
     e.preventDefault();
     const loginData = {
@@ -44,6 +46,7 @@ const Login = () => {
           placeholder="Enter your password"
           onChange={(e) => setPassword(e.target.value)}
         />
+        <p>{error ? error : ""}</p>
         <button className={classes.button} type="submit">
           Continue
         </button>
