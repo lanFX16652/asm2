@@ -2,10 +2,9 @@ import classes from "./HotelBooking.module.css";
 import { DateRange } from "react-date-range";
 import useFetchHotelDetail from "../../hooks/useFetchHotelDetail";
 import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import axios from "axios";
 import RoomItem from "./RoomItem/RoomItem";
-import { addDays, subDays } from "date-fns";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createTransaction } from "../../redux/transactionSlice";
@@ -44,8 +43,8 @@ const HotelBooking = () => {
       hotel: hotelDetail._id,
       rooms: roomArr,
       roomsNumber: roomNumberArr,
-      dateStart: calendar[0].startDate,
-      dateEnd: calendar[0].endDate,
+      dateStart: calendar[0].startDate.toDateString(),
+      dateEnd: calendar[0].endDate.toDateString(),
       price: totalPrice,
       payment: payment,
       status: "Booked",

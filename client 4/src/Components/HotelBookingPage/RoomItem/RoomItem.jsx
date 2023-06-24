@@ -1,8 +1,6 @@
 import classes from "./RoomItem.module.css";
-import { useState, useEffect } from "react";
-import axiosInstance from "../../../axios";
-import qs from "qs";
-import dayjs from "dayjs";
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
 
 const RoomItem = ({
   roomId,
@@ -13,26 +11,32 @@ const RoomItem = ({
 }) => {
   const [roomData, setRoomData] = useState();
 
-  const totalPriceHanlder = (roomBookedDataUpdate) => {
-    const totalPrice = roomBookedDataUpdate.reduce((prevPrice, currentRoom) => {
-      const msPerDay = 1000 * 60 * 60 * 24;
-      const dateBooked =
-        !calendar[0].startDate && !calendar[0].endDate
-          ? 1
-          : Math.floor(
-              (calendar[0].endDate - calendar[0].startDate) / msPerDay
-            );
+  const totalPriceHanlder = useCallback(
+    (roomBookedDataUpdate) => {
+      const totalPrice = roomBookedDataUpdate.reduce(
+        (prevPrice, currentRoom) => {
+          const msPerDay = 1000 * 60 * 60 * 24;
+          const dateBooked =
+            !calendar[0].startDate && !calendar[0].endDate
+              ? 1
+              : Math.floor(
+                  (calendar[0].endDate - calendar[0].startDate) / msPerDay
+                );
 
-      const totalPriceCurrentRoom =
-        currentRoom.roomsNumber.length *
-        currentRoom.roomData.price *
-        dateBooked;
+          const totalPriceCurrentRoom =
+            currentRoom.roomsNumber.length *
+            currentRoom.roomData.price *
+            dateBooked;
 
-      return prevPrice + totalPriceCurrentRoom;
-    }, 0);
+          return prevPrice + totalPriceCurrentRoom;
+        },
+        0
+      );
 
-    setTotalPrice(totalPrice);
-  };
+      setTotalPrice(totalPrice);
+    },
+    [calendar, setTotalPrice]
+  );
 
   const onChooseRoom = (e, room) => {
     if (e.target.checked) {
@@ -103,29 +107,16 @@ const RoomItem = ({
 
   useEffect(() => {
     const fetchListRoom = () => {
-      // axios({
-      //   method: "GET",
-      //   url: `http://localhost:5000/client/room-number/${roomId}`,
-      //   params:   {
-      //   startDate: calendar[0].startDate,
-      //   endDate: calendar[0].endDate,
-      // })
-      //   .then((result) => {
-      //     setRoomData(result.data);
-      //   })
-      //   .catch((error) => console.log(error));
-
-      axiosInstance
-        .get(`client/room-number/${roomId}`, {
-          params: {
-            startDate: calendar[0].startDate,
-            endDate: calendar[0].endDate,
-          },
-          paramsSerializer: {
-            startDate: calendar[0].startDate,
-            endDate: calendar[0].endDate,
-          },
-        })
+      const startDate = calendar[0].startDate.toDateString();
+      const endDate = calendar[0].endDate.toDateString();
+      axios({
+        method: "GET",
+        url: `http://localhost:5000/client/room-number/${roomId}`,
+        params: {
+          startDate,
+          endDate,
+        },
+      })
         .then((result) => {
           setRoomData(result.data);
         })
@@ -133,14 +124,13 @@ const RoomItem = ({
     };
 
     if (calendar[0].startDate && calendar[0].endDate) {
-      console.log("fetch");
       fetchListRoom();
     }
-  }, [roomId, calendar[0]]);
+  }, [calendar, roomId]);
 
   useEffect(() => {
     totalPriceHanlder(roomBookedData);
-  }, [calendar]);
+  }, [calendar, roomBookedData, totalPriceHanlder]);
 
   return (
     <div className={classes["budgetroom-wrapper"]}>

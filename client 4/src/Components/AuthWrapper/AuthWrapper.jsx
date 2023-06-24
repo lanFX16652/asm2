@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { loginSuccess } from "../../redux/authSlice";
@@ -15,7 +15,7 @@ const AuthWrapper = ({ children }) => {
     } else {
       navigate("/login");
     }
-  }, [user?.accessToken]);
+  }, [user.accessToken]);
 
   return <Outlet />;
 };

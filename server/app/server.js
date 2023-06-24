@@ -33,21 +33,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(cookieParser());
 
-//sử dụng session để kiểm tra login
-// app.use(
-//   session({
-//     secret: "my secret",
-//     resave: false,
-//     saveUninitialized: true,
-//     store: store,
-//   })
-// );
-
-
-
-// authenticate route
-
-
 //init web routes
 app.use(authenticateRouter);
 app.use(transactionRoute);
