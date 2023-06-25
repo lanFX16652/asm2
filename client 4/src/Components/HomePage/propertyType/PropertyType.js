@@ -17,7 +17,7 @@ function PropertyType(props) {
           <PropertyTypeItem type={type} />
         ))} */}
         <div className="property-wrap">
-          <img src={process.env.PUBLIC_URL + '/images/type_1.webp'} />
+          <img src={'/images/type_1.webp'} />
           <h3>Hotels</h3>
           <p>{propHotelType.length} properties</p>
         </div>

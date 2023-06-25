@@ -19,7 +19,8 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerStart());
     try {
-        await axios.post("http://localhost:5000/client/signup", user);
+        const res = await axios.post("http://localhost:5000/client/signup", user);
+        localStorage.setItem('userData', JSON.stringify(res.data));
         dispatch(registerSuccess());
         navigate("/");
     } catch (err) {

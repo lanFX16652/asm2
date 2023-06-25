@@ -62,15 +62,13 @@ const deleteRoom = async (req, res) => {
 // CONTROLLER FOR CLIENT PAGE
 const getRoomNumberList = async (req, res) => {
   const { startDate, endDate } = req.query
-  console.log(startDate, endDate)
-  console.log(new Date(+startDate).toUTCString(), new Date(+endDate))
+
   const dateRangeFindToBook = parseDateToArray(startDate, endDate, true)
-  // console.log(dateRangeFindToBook)
   const room = await Room.findById(req.params.id)
 
   room.roomsNumber = room.roomsNumber.filter(roomNumber => {
     const isOutOfRoom = roomNumber.unavailableDate.some(date => {
-      // console.log(date.getTime(), roomNumber.number)
+
       return dateRangeFindToBook.includes(date.toDateString())
     })
     if (isOutOfRoom) {

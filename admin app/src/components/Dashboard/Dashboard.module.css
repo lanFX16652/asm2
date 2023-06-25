@@ -53,9 +53,20 @@
   padding: 0px 5px 10px 0px;
 }
 
-.users .icon-wrapper i .bi-file-person-fill{
-  color: #DC143C;
+.users .icon-wrapper i {
+  color: #dc143c;
+}
 
+.orders .icon-wrapper i {
+  color: #DAA520;
+}
+
+.earnings .icon-wrapper i {
+  color: #0D860D;
+}
+
+.balance .icon-wrapper i {
+  color: #A74DA7;
 }
 
 /* STYLING THE TABLE */
@@ -66,7 +77,6 @@
   border: 1px solid;
   margin-top: 20px;
 }
-
 
 .table-transaction td,
 .table-transaction th {

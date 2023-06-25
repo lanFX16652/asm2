@@ -13,9 +13,9 @@ const AuthWrapper = ({ children }) => {
     if (user) {
       dispatch(loginSuccess(user.user));
     } else {
-      navigate("/login");
+      // navigate("/login");
     }
-  }, [user.accessToken]);
+  }, [user?.accessToken]);
 
   return <Outlet />;
 };

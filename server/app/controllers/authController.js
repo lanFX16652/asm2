@@ -2,6 +2,8 @@ import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+//jwt là một thư viện quản lý thông tin và sessions dựa trên thông tin sign dưới dạng token được mã hóa thành một chuỗi với secret
+
 const signJWT = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 };
@@ -38,6 +40,7 @@ const logIn = (req, res, next) => {
   User.findOne({ email: email })
   .then((user) => {
     if (!user) {
+//status 400:bad request => yêu cầu không hợp lệ  
       return res.status(400).json({ message: "Email/Mat Khau khong hop le" });
     }
 

@@ -62,9 +62,8 @@ const HotelBooking = () => {
         data: payload,
       }).then((result) => {
         dispatch(createTransaction(result.data));
+        navigate("/transactions");
       });
-
-      navigate("/transactions");
     } else {
       setIsFormValid(false);
     }

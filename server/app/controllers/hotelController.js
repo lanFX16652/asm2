@@ -82,6 +82,7 @@ const searchHotel = async (req, res) => {
     true
   );
 
+
   //TẠO MẢNG HOTEL THỎA ĐIỀU KIỆN CITY
   const listHotelFilterCity = await Hotel.find(
     {
@@ -93,7 +94,7 @@ const searchHotel = async (req, res) => {
     {},
     {},
   ).populate('rooms');
-
+  console.log(timeRangeRequest)
   // filter qua tung khach san trong danh sach khach san thoa dieu kien city
   const listHotel = listHotelFilterCity.filter((hotel) => {
     let isMatchPeople = false;
@@ -106,9 +107,9 @@ const searchHotel = async (req, res) => {
       }
       // dung phuong thuc every de xac dinh toan bo loai phong bi het phong 
       const isOutOfRoom = room.roomsNumber.every((roomNumber) => {
-        return roomNumber.unavailableDate.some((date) =>
-          timeRangeRequest.includes(date.toDateString())
-        );
+        return roomNumber.unavailableDate.some((date) => {
+          return timeRangeRequest.includes(date.toDateString())
+        });
       });
       if (isOutOfRoom) isMatchDateBooked = true;
     });

@@ -11,32 +11,26 @@ const RoomItem = ({
 }) => {
   const [roomData, setRoomData] = useState();
 
-  const totalPriceHanlder = useCallback(
-    (roomBookedDataUpdate) => {
-      const totalPrice = roomBookedDataUpdate.reduce(
-        (prevPrice, currentRoom) => {
-          const msPerDay = 1000 * 60 * 60 * 24;
-          const dateBooked =
-            !calendar[0].startDate && !calendar[0].endDate
-              ? 1
-              : Math.floor(
-                  (calendar[0].endDate - calendar[0].startDate) / msPerDay
-                );
+  const totalPriceHanlder = (roomBookedDataUpdate) => {
+    const totalPrice = roomBookedDataUpdate.reduce((prevPrice, currentRoom) => {
+      const msPerDay = 1000 * 60 * 60 * 24;
+      const dateBooked =
+        !calendar[0].startDate && !calendar[0].endDate
+          ? 1
+          : Math.floor(
+              (calendar[0].endDate - calendar[0].startDate) / msPerDay
+            );
 
-          const totalPriceCurrentRoom =
-            currentRoom.roomsNumber.length *
-            currentRoom.roomData.price *
-            dateBooked;
+      const totalPriceCurrentRoom =
+        currentRoom.roomsNumber.length *
+        currentRoom.roomData.price *
+        dateBooked;
 
-          return prevPrice + totalPriceCurrentRoom;
-        },
-        0
-      );
+      return prevPrice + totalPriceCurrentRoom;
+    }, 0);
 
-      setTotalPrice(totalPrice);
-    },
-    [calendar, setTotalPrice]
-  );
+    setTotalPrice(totalPrice);
+  };
 
   const onChooseRoom = (e, room) => {
     if (e.target.checked) {
@@ -130,7 +124,7 @@ const RoomItem = ({
 
   useEffect(() => {
     totalPriceHanlder(roomBookedData);
-  }, [calendar, roomBookedData, totalPriceHanlder]);
+  }, [calendar[0], roomBookedData, totalPriceHanlder]);
 
   return (
     <div className={classes["budgetroom-wrapper"]}>

@@ -8,7 +8,7 @@ const TransactionPage = () => {
   const user = useSelector((state) => state.auth.login.currentUser);
 
   const [userTransactions, setUserTransactions] = useState([]);
-
+  console.log(user);
   useEffect(() => {
     axios({
       method: "GET",
